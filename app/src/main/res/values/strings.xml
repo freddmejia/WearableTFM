@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">WearableTFM</string>
+    <string name="wearable_app">Wearable App</string>
+    <string name="wearable_hello">Hello</string>
+    <string name="message_welcome">Bienvenido  a Wearable App, una app para recolectar la informacion de tu wearable y mostrarte.... </string>
+    <string name="access_title">Acceder</string>
+    <string name="new_user">Soy nuevo</string>
+    <string name="login_email">Escribe correo electronico</string>
+    <string name="login_password">Escribe contraseña</string>
+    <string name="btn_access">Ingresar</string>
+    <string name="forget_password">Olvidaste la contraseña?</string>
+    <string name="new_user_title">Registrarse</string>
+    <string name="new_user_names">Escribe nombres y apellidos</string>
 </resources>
