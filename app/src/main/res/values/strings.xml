@@ -11,4 +11,6 @@
     <string name="forget_password">Olvidaste la contraseña?</string>
     <string name="new_user_title">Registrarse</string>
     <string name="new_user_names">Escribe nombres y apellidos</string>
+    <string name="title_permission_notfication">Permiso de notificación</string>
+    <string name="text_permission_notfication">Permiso para mostrar notificaciones: Hola, para mantenerte al tanto de nuestras actualizaciones importantes, nos gustaría enviarte notificaciones. ¿Aceptas recibir notificaciones de WearableTFM? </string>
 </resources>
