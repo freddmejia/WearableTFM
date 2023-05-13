@@ -52,6 +52,7 @@
                     </com.google.android.material.card.MaterialCardView>
                 </com.google.android.material.card.MaterialCardView>
                 <TextView
+                    android:id="@+id/username"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
@@ -79,6 +80,7 @@
             android:textColor="@color/black_4b"
             />
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvHealth"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="15sp"

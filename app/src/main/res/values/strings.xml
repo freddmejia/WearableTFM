@@ -21,6 +21,11 @@
     <string name="health_weight">Kg</string>
     <string name="health_size">Cm</string>
     <string name="health_old">Años</string>
+    <string name="update_user">Guardar</string>
+    <string name="logout">Cerrar session</string>
+    <string name="weight_user">Escribe tu peso en kg</string>
+    <string name="size_user">Escribe tu altura en cm</string>
+    <string name="old_user">Escoge tu fecha de nacimiento</string>
     <!-- errors -->
     <string name="error_fill">LLena todos los campos</string>
 </resources>

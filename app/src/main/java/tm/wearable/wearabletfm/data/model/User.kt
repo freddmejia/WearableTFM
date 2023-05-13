@@ -14,7 +14,8 @@ class User(
     var token_firebase: String? = null,
     var image: String? = null,
     var code_qr: String? = null,
-    var token: String
+    var token: String,
+    var health: Health? = null
 ) {
     constructor() : this(0,"","","","","","")
     constructor(jsonObject: JSONObject): this(

@@ -97,9 +97,17 @@ class LoginActivity : AppCompatActivity() {
                             json.put("code_qr",result.data.data.code_qr.toString())
                             json.put("language","es")
 
+
                             this?.putString("user",json.toString())
                             this?.putString("token",result.data.data.token)
                             this?.putBoolean("islogged",true)
+                            json = JSONObject()
+                            json.put("id",result.data.data.health?.id.toString())
+                            json.put("height",result.data.data.health?.height.toString())
+                            json.put("weight",result.data.data.health?.weight.toString())
+                            json.put("birthay",result.data.data.health?.birthay.toString())
+                            json.put("yearOld",result.data.data.health?.yearOld.toString())
+                            this?.putString("health",json.toString())
                             this?.apply()
                         }
                         finish()

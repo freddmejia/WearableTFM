@@ -23,7 +23,9 @@ class UserRepository  @Inject constructor(
                 val response = userRemoteDataSource.login(requestBody = requestBody)
                 val body = response.body()
                 if (body != null) {
-                    val ab = CompositionObj<User,String>(response.body()!!.user, response.body()!!.message)
+                    var user = response.body()!!.user
+                    user.health = response.body()!!.health_data
+                    val ab = CompositionObj<User,String>(user, response.body()!!.message)
                     Result.Success(ab)
                 }
                 else{

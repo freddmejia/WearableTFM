@@ -34,6 +34,8 @@ interface UserServiceRemote {
 class UserResponseApi {
     @SerializedName("user") var user: User = User()
     @SerializedName("message") var message: String = ""
+    @SerializedName("health_data") var health_data: Health = Health()
+
 }
 class UserShortResponseApi {
     @SerializedName("user") var user: shortUser = shortUser()
