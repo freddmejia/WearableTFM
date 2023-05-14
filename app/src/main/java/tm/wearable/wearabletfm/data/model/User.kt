@@ -15,7 +15,8 @@ class User(
     var image: String? = null,
     var code_qr: String? = null,
     var token: String,
-    var health: Health? = null
+    var health: Health? = null,
+    var password: String = ""
 ) {
     constructor() : this(0,"","","","","","")
     constructor(jsonObject: JSONObject): this(

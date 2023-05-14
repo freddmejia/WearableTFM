@@ -38,16 +38,17 @@
                     android:layout_width="24sp"
                     android:layout_height="24sp"
                     android:src="@drawable/weight_icon"
-                    android:layout_marginRight="10sp"/>
+                    android:layout_marginRight="10sp"
+                    android:layout_gravity="center"/>
+
                 <EditText
                     android:id="@+id/weightUser"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="text"
                     android:background="@android:color/transparent"
                     android:hint="@string/weight_user"
                     android:imeOptions="actionDone"
-                    />
+                    android:inputType="numberDecimal" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -72,12 +73,13 @@
                     android:layout_width="24sp"
                     android:layout_height="24sp"
                     android:src="@drawable/size_icon"
-                    android:layout_marginRight="10sp"/>
+                    android:layout_marginRight="10sp"
+                    android:layout_gravity="center"/>
                 <EditText
                     android:id="@+id/sizeUser"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="text"
+                    android:inputType="numberDecimal"
                     android:background="@android:color/transparent"
                     android:hint="@string/size_user"
                     android:imeOptions="actionDone"
@@ -106,15 +108,17 @@
                     android:layout_width="24sp"
                     android:layout_height="24sp"
                     android:src="@drawable/birthay_icon"
-                    android:layout_marginRight="10sp"/>
-                <EditText
+                    android:layout_marginRight="10sp"
+                    android:layout_gravity="center"/>
+                <TextView
                     android:id="@+id/oldUser"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="text"
+                    android:inputType="date"
                     android:background="@android:color/transparent"
                     android:hint="@string/old_user"
                     android:imeOptions="actionDone"
+                    style="@style/normal_medium"
                     />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>

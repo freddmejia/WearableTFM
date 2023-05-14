@@ -26,6 +26,20 @@
     <string name="weight_user">Escribe tu peso en kg</string>
     <string name="size_user">Escribe tu altura en cm</string>
     <string name="old_user">Escoge tu fecha de nacimiento</string>
+    <string name="cancel">Cancelar</string>
+    <string name="accept">Aceptar</string>
+    <string name="name_medicine">Nombre de medicina</string>
+    <string name="date_start_medicine">Fecha desde</string>
+    <string name="date_finish_medicine">Fecha hasta</string>
+    <string name="days_medicine">Dias de medicina</string>
+    <string name="monday_letter">L</string>
+    <string name="tuesday_letter">M</string>
+    <string name="wednesday_letter">X</string>
+    <string name="thursday_letter">J</string>
+    <string name="friday_letter">V</string>
+    <string name="saturday_letter">S</string>
+    <string name="sunday_letter">D</string>
+
     <!-- errors -->
     <string name="error_fill">LLena todos los campos</string>
 </resources>

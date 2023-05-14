@@ -2,6 +2,7 @@ package tm.wearable.wearabletfm.data.repository.repo
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import tm.wearable.wearabletfm.data.model.Health
 import tm.wearable.wearabletfm.data.model.User
 import tm.wearable.wearabletfm.data.model.shortUser
 import tm.wearable.wearabletfm.data.repository.datasource.remote.UserRemoteDataSource
@@ -72,6 +73,28 @@ class UserRepository  @Inject constructor(
                 val body = response.body()
                 if (body != null) {
                     val ab = CompositionObj<shortUser,String>(response.body()!!.user, response.body()!!.message)
+                    Result.Success(ab)
+                }
+                else{
+                    errorResult( message = "",errorBody = response.errorBody()!!)
+                }
+            }catch (e: Exception){
+                errorResult(message = e.message ?: e.toString())
+            }
+        }
+    }
+
+    suspend fun update_health_user(height: String, weight: String, birthay: String): Result<CompositionObj<Health, String>> {
+        return withContext(Dispatchers.Default){
+            try {
+                val requestBody: MutableMap<String, String> = HashMap()
+                requestBody["height"] = height
+                requestBody["weight"] = weight
+                requestBody["birthay"] = birthay
+                val response = userRemoteDataSource.updateHealthDataUser(requestBody = requestBody)
+                val body = response.body()
+                if (body != null) {
+                    val ab = CompositionObj(response.body()!!.health_data, response.body()!!.message)
                     Result.Success(ab)
                 }
                 else{

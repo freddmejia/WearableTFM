@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <LinearLayout
+        android:id="@+id/linear"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
@@ -38,16 +39,18 @@
                     android:layout_height="55sp"
                     app:cardCornerRadius="30sp"
                     android:backgroundTint="@color/blue_e3"
-                    android:layout_gravity="center">
+                    android:layout_gravity="center"
+                    app:cardElevation="8sp">
                     <com.google.android.material.card.MaterialCardView
                         android:layout_width="52sp"
                         android:layout_height="52sp"
                         app:cardCornerRadius="30sp"
-                        android:layout_gravity="center">
+                        android:layout_gravity="center"
+                        >
                         <ImageView
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:src="@drawable/key_icon"
+                            android:src="@drawable/square_user_icon"
                             android:padding="11sp"/>
                     </com.google.android.material.card.MaterialCardView>
                 </com.google.android.material.card.MaterialCardView>
@@ -116,8 +119,8 @@
                             android:layout_height="wrap_content"
                             android:text="76"
                             android:gravity="center"
-                            style="@style/normal_medium"
-                            android:layout_marginBottom="4sp"
+                            style="@style/bold_medium"
+                            android:layout_marginBottom="1sp"
                             android:textColor="@color/white"
                             />
                         <TextView
@@ -152,8 +155,8 @@
                             android:layout_height="wrap_content"
                             android:text="76"
                             android:gravity="center"
-                            style="@style/normal_medium"
-                            android:layout_marginBottom="4sp"
+                            style="@style/bold_medium"
+                            android:layout_marginBottom="1sp"
                             android:textColor="@color/white"
                             />
                         <TextView
@@ -189,7 +192,7 @@
                             android:layout_height="wrap_content"
                             android:text="76"
                             android:gravity="center"
-                            style="@style/normal_medium"
+                            style="@style/bold_medium"
                             android:layout_marginBottom="4sp"
                             android:textColor="@color/white"
                             />
@@ -249,4 +252,10 @@
 
         </com.google.android.material.card.MaterialCardView>
     </LinearLayout>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
 </RelativeLayout>

@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import tm.wearable.wearabletfm.data.model.Health
 import tm.wearable.wearabletfm.data.model.User
 import tm.wearable.wearabletfm.data.model.shortUser
 import tm.wearable.wearabletfm.data.repository.repo.UserRepository
@@ -22,6 +23,9 @@ class UserViewModel  @Inject constructor(
 
     private val _compositionUpdateUser = MutableStateFlow<Result<CompositionObj<shortUser, String>>>(Result.Empty)
     val compositionUpdateUser :  StateFlow<Result<CompositionObj<shortUser, String>>> = _compositionUpdateUser
+
+    private val _compositionUpdateHealthUser = MutableStateFlow<Result<CompositionObj<Health, String>>>(Result.Empty)
+    val compositionUpdateHealthUser :  StateFlow<Result<CompositionObj<Health, String>>> = _compositionUpdateHealthUser
 
     private val _loadingProgress = MutableStateFlow(false)
     val loadingProgress: StateFlow<Boolean> = _loadingProgress
@@ -46,4 +50,13 @@ class UserViewModel  @Inject constructor(
         _compositionUpdateUser.value = userRepository.update_user(email = email, password = password, name = name)
         _loadingProgress.value = false
     }
+
+    fun update_health_user(height: String, weight: String, birthay: String) = viewModelScope.launch {
+        _compositionUpdateHealthUser.value = Result.Empty
+        _loadingProgress.value = true
+        _compositionUpdateHealthUser.value = userRepository.update_health_user(height = height, weight = weight, birthay = birthay)
+        _loadingProgress.value = false
+    }
+
+
 }
