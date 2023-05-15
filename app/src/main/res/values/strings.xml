@@ -39,7 +39,14 @@
     <string name="friday_letter">V</string>
     <string name="saturday_letter">S</string>
     <string name="sunday_letter">D</string>
+    <string name="save">Guardar</string>
+    <string name="add_medicine">Agregar medicina</string>
+    <string name="medicines">Mis medicinas</string>
+
 
     <!-- errors -->
     <string name="error_fill">LLena todos los campos</string>
+    <string name="error_medicine_detail">No puede existir dos dias iguales</string>
+    <string name="error_dates_same">Fecha hasta no puede ser menor</string>
+    <string name="error_not_day_medicine">Debes escoger un dia de la toma de tu medicina</string>
 </resources>

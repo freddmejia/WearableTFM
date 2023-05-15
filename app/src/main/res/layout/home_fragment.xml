@@ -220,6 +220,7 @@
             android:textColor="@color/black_4b"
             />
         <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cvMedicines"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             app:cardCornerRadius="15sp"
@@ -232,11 +233,14 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical">
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/rvMedicines"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="17sp"
                     android:layout_marginHorizontal="20sp"
+                    android:clickable="true"
+                    android:focusable="true"
                     />
                 <ImageView
                     android:id="@+id/addMedicine"

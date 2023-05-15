@@ -20,6 +20,10 @@ import tm.wearable.wearabletfm.data.repository.repo.UserRepository
 import javax.inject.Named
 import javax.inject.Singleton
 import tm.wearable.wearabletfm.R
+import tm.wearable.wearabletfm.data.repository.api.MedicineServiceRemote
+import tm.wearable.wearabletfm.data.repository.datasource.remote.MedicineRemoteDataSource
+import tm.wearable.wearabletfm.data.repository.repo.MedicineRepository
+
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
@@ -56,6 +60,7 @@ object AppModule {
         .addConverterFactory(GsonConverterFactory.create(gson))
         .build()
 
+    //user
     @Provides
     fun provideUserService(@Named("api") retrofit: Retrofit): UserServiceRemote = retrofit.create(UserServiceRemote::class.java)
 
@@ -67,6 +72,17 @@ object AppModule {
     @Provides
     fun provideUserRepository(userDataSourceRemote: UserRemoteDataSource) = UserRepository(userDataSourceRemote)
 
+    //medicine
+    @Provides
+    fun provideMedicineService(@Named("api") retrofit: Retrofit): MedicineServiceRemote = retrofit.create(MedicineServiceRemote::class.java)
+
+    @Singleton
+    @Provides
+    fun provideMedicineRemoteDataSource(medicineServiceRemote: MedicineServiceRemote) = MedicineRemoteDataSource(medicineServiceRemote)
+
+    @Singleton
+    @Provides
+    fun provideMedicineRepository(medicineRemoteDataSource: MedicineRemoteDataSource) = MedicineRepository(medicineRemoteDataSource)
 
 
 }

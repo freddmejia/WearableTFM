@@ -7,23 +7,27 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
-import tm.wearable.wearabletfm.AddMedicineActivity
+import tm.wearable.wearabletfm.ui.AddMedicineActivity
 
 import tm.wearable.wearabletfm.R
+import tm.wearable.wearabletfm.data.adapter.MedicinesLittleAdapter
 import tm.wearable.wearabletfm.data.interfaces.UIUserHealth
 import tm.wearable.wearabletfm.data.interfaces.UIUserProfile
 import tm.wearable.wearabletfm.data.model.Health
+import tm.wearable.wearabletfm.data.model.Medicine
 import tm.wearable.wearabletfm.data.model.User
 import tm.wearable.wearabletfm.data.model.shortUser
+import tm.wearable.wearabletfm.data.viewmodel.MedicineViewModel
 import tm.wearable.wearabletfm.data.viewmodel.UserViewModel
 import tm.wearable.wearabletfm.databinding.HomeFragmentBinding
+import tm.wearable.wearabletfm.ui.MedicineActivity
 import tm.wearable.wearabletfm.utils.CompositionObj
 import tm.wearable.wearabletfm.utils.WearableDialogs
 
@@ -35,6 +39,8 @@ class HomeFragment: Fragment(R.layout.home_fragment), UIUserProfile, UIUserHealt
     private lateinit var sharedPref: SharedPreferences
     private lateinit var toast: Toast
     private val userViewModel: UserViewModel by viewModels()
+    private val medicineViewModel: MedicineViewModel by viewModels()
+    private lateinit var medicinesLittleAdapter: MedicinesLittleAdapter
     companion object{
         fun newInstance(): HomeFragment {
             return HomeFragment()
@@ -55,10 +61,18 @@ class HomeFragment: Fragment(R.layout.home_fragment), UIUserProfile, UIUserHealt
 
         }
 
+        medicinesLittleAdapter = MedicinesLittleAdapter(this@HomeFragment.requireContext(), arrayListOf())
+        binding?.rvMedicines?.layoutManager = LinearLayoutManager(this@HomeFragment.requireContext())
+        binding?.rvMedicines?.adapter = medicinesLittleAdapter
+
         showUserProfile(user = user)
         showUserHealth(health = health)
         events()
         coroutines()
+    }
+
+    fun api(){
+        medicineViewModel.fetch_three_last_medicines_by_user()
     }
 
     fun events() {
@@ -84,6 +98,10 @@ class HomeFragment: Fragment(R.layout.home_fragment), UIUserProfile, UIUserHealt
 
         binding?.addMedicine?.setOnClickListener {
             startActivity(Intent(this@HomeFragment.requireActivity(), AddMedicineActivity::class.java))
+        }
+
+        binding?.cvMedicines?.setOnClickListener {
+            startActivity(Intent(this@HomeFragment.requireActivity(), MedicineActivity::class.java))
         }
     }
 
@@ -160,6 +178,19 @@ class HomeFragment: Fragment(R.layout.home_fragment), UIUserProfile, UIUserHealt
             }
         }
 
+        lifecycleScope.launchWhenCreated {
+            medicineViewModel.compositionMedicines.collect { result->
+                when(result) {
+                    is tm.wearable.wearabletfm.utils.Result.Success<CompositionObj<ArrayList<Medicine>, String>> ->{
+                        medicinesLittleAdapter.setNewData(result.data.data)
+                    }
+                    is tm.wearable.wearabletfm.utils.Result.Error ->
+                        showToast(message = result.error)
+                    else -> Unit
+                }
+            }
+        }
+
     }
 
     override fun save(user: User) {
@@ -188,6 +219,10 @@ class HomeFragment: Fragment(R.layout.home_fragment), UIUserProfile, UIUserHealt
         binding?.sizeUser?.text = health.height
         binding?.oldUser?.text = health.yearOld.toString()
     }
-    //
+
+    override fun onResume() {
+        super.onResume()
+        api()
+    }
 
 }
