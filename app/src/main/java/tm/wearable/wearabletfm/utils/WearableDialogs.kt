@@ -18,8 +18,14 @@ import tm.wearable.wearabletfm.data.interfaces.UIUserProfile
 import tm.wearable.wearabletfm.data.model.User
 import tm.wearable.wearabletfm.databinding.UpdateUserAlertBinding
 import tm.wearable.wearabletfm.R
+import tm.wearable.wearabletfm.data.adapter.FriendsRequestAdapter
+import tm.wearable.wearabletfm.data.interfaces.UIObserverFriendGeoZone
+import tm.wearable.wearabletfm.data.interfaces.UIObserverFriendRequest
 import tm.wearable.wearabletfm.data.interfaces.UIUserHealth
+import tm.wearable.wearabletfm.data.model.Friend
 import tm.wearable.wearabletfm.data.model.Health
+import tm.wearable.wearabletfm.databinding.AddGeozoneAlertBinding
+import tm.wearable.wearabletfm.databinding.FriendAlertBinding
 import tm.wearable.wearabletfm.databinding.UpdateHealthAlertBinding
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -140,5 +146,42 @@ class WearableDialogs {
             alertDialogBuilder.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.red))
             alertDialogBuilder.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.blue_f4))
         }
+        fun friends_request_dialog(context: Context, observer: UIObserverFriendRequest, friendsR: ArrayList<Friend>){
+            val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(context).setCancelable(false).create()
+            val binding = FriendAlertBinding.bind(LayoutInflater.from(context).inflate(R.layout.friend_alert,null))
+
+            var adapter = FriendsRequestAdapter(context = context, list =  friendsR, observer = observer, alertDialogBuilder = alertDialogBuilder)
+            binding.rvFriends.layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
+            binding.rvFriends.adapter = adapter
+            alertDialogBuilder.setButton(Dialog.BUTTON_NEGATIVE,context.resources.getString(R.string.cancel),
+                DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                })
+
+            alertDialogBuilder.setView(binding.root)
+            alertDialogBuilder.show()
+            alertDialogBuilder.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.red))
+        }
+        fun friends_geozone_dialog(friend: Friend, context: Context, observer: UIObserverFriendGeoZone){
+            val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(context).setCancelable(false).create()
+            val binding = AddGeozoneAlertBinding.bind(LayoutInflater.from(context).inflate(R.layout.add_geozone_alert,null))
+            binding.title.text = context.resources.getString(R.string.geozone_alert_title) + " "+friend.name
+            alertDialogBuilder.setButton(Dialog.BUTTON_POSITIVE,context.resources.getString(R.string.accept),
+                DialogInterface.OnClickListener { dialogInterface, i ->
+                    observer.addedGeo()
+                    dialogInterface.dismiss()
+                })
+            alertDialogBuilder.setButton(Dialog.BUTTON_NEGATIVE,context.resources.getString(R.string.cancel),
+                DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                })
+
+            alertDialogBuilder.setView(binding.root)
+            alertDialogBuilder.show()
+            alertDialogBuilder.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.red))
+            alertDialogBuilder.getButton(Dialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.blue_a7))
+        }
     }
+
+
 }

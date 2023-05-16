@@ -43,10 +43,19 @@
     <string name="add_medicine">Agregar medicina</string>
     <string name="medicines">Mis medicinas</string>
 
+    <string name="have_friends_request"> <u>Tienes solicitudes de amigos pendientes</u> </string>
+    <string name="my_friends">Mis amigos</string>
+    <string name="dont_have_friends">Aun no tienes amigos agrega uno</string>
+    <string name="find_friend_by_name_email">Escribe el nombre o e-mail</string>
+    <string name="find_friend">Agrega un amigo</string>
+    <string name="geozone_alert_title">Quieres guardar esta gezona para: </string>
+    <string name="title_add_friend">Agrega un amigo</string>
 
     <!-- errors -->
     <string name="error_fill">LLena todos los campos</string>
     <string name="error_medicine_detail">No puede existir dos dias iguales</string>
     <string name="error_dates_same">Fecha hasta no puede ser menor</string>
     <string name="error_not_day_medicine">Debes escoger un dia de la toma de tu medicina</string>
+    <string name="error_no_data">No hay datos</string>
+    <string name="error_data">Hay datos</string>
 </resources>

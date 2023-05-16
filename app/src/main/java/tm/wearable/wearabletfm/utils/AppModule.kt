@@ -20,8 +20,11 @@ import tm.wearable.wearabletfm.data.repository.repo.UserRepository
 import javax.inject.Named
 import javax.inject.Singleton
 import tm.wearable.wearabletfm.R
+import tm.wearable.wearabletfm.data.repository.api.FriendServiceRemote
 import tm.wearable.wearabletfm.data.repository.api.MedicineServiceRemote
+import tm.wearable.wearabletfm.data.repository.datasource.remote.FriendRemoteDataSource
 import tm.wearable.wearabletfm.data.repository.datasource.remote.MedicineRemoteDataSource
+import tm.wearable.wearabletfm.data.repository.repo.FriendRepository
 import tm.wearable.wearabletfm.data.repository.repo.MedicineRepository
 
 @Module
@@ -83,6 +86,19 @@ object AppModule {
     @Singleton
     @Provides
     fun provideMedicineRepository(medicineRemoteDataSource: MedicineRemoteDataSource) = MedicineRepository(medicineRemoteDataSource)
+
+
+    //friend
+    @Provides
+    fun provideFriendService(@Named("api") retrofit: Retrofit): FriendServiceRemote = retrofit.create(FriendServiceRemote::class.java)
+
+    @Singleton
+    @Provides
+    fun provideFriendRemoteDataSource(friendServiceRemote: FriendServiceRemote) = FriendRemoteDataSource(friendServiceRemote)
+
+    @Singleton
+    @Provides
+    fun provideFriendRepository(friendRemoteDataSource: FriendRemoteDataSource) = FriendRepository(friendRemoteDataSource)
 
 
 }
