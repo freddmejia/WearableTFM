@@ -67,7 +67,6 @@ class FriendFragment: Fragment(R.layout.friend_fragment), UIObserverGeneric<Frie
 
         events()
         coroutines()
-
         api()
     }
 
