@@ -87,7 +87,7 @@ class FriendFragment: Fragment(R.layout.friend_fragment), UIObserverGeneric<Frie
     fun api() {
         Log.e("", "api: user " +user.id.toString() )
         acceptOrDeleteFriend = 0
-        friendViewModel.fetch_friends()
+        friendViewModel.fetch_friends(user_id = user.id.toString())
         friendViewModel.fetch_friends_request()
     }
 

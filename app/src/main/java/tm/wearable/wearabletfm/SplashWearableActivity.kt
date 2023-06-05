@@ -16,27 +16,19 @@ class SplashWearableActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         Handler(Looper.getMainLooper()).postDelayed({
-
-            isUserLoggued()
+            navigateToActivity()
         }, 2000)
     }
 
-    fun isUserLoggued(){
+    fun navigateToActivity(){
         val prefsUser = this@SplashWearableActivity?.getSharedPreferences(
             resources.getString(R.string.shared_preferences),
             Context.MODE_PRIVATE
         )
-        val islogged = prefsUser!!.getBoolean("islogged",false)
-        if (!islogged){
-            startActivity(
-                Intent(this@SplashWearableActivity, MainActivity::class.java)
-            )
-            finish()
-            return
-        }
-        startActivity(
-            Intent(this@SplashWearableActivity, MainAppActivity::class.java)
-        )
+        val islogged = prefsUser?.getBoolean("islogged",false)?:false
+
+        var targetActivity = if (islogged) MainAppActivity::class.java else MainActivity::class.java
+        startActivity(Intent(this@SplashWearableActivity, targetActivity))
         finish()
     }
 }

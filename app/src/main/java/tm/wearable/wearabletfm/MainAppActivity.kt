@@ -56,8 +56,6 @@ class MainAppActivity : AppCompatActivity() {
     }
 
     fun chooseSelectionMenu(fragment: Fragment){
-
-
         when(fragment){
             is HomeFragment -> {
                 appeareance(
