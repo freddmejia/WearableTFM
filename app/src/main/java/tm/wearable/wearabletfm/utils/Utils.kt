@@ -9,6 +9,8 @@ class Utils {
     companion object {
         const val api_version = "/api"
         const val domainApi = "http://192.168.1.16:8000/"
+        const val domainApiFitbit = "https://www.fitbit.com/"
+        const val oauthFitbit = "/oauth2"
 
         //user
         const val login = "$api_version/login"
@@ -38,6 +40,10 @@ class Utils {
         const val update_geofence_friend = "$api_version/update_geofence_friend"
         const val fetch_geofence_byfriend = "$api_version/fetch_geofence_byfriend"
         const val delete_geofence_byfriend = "$api_version/delete_geofence_byfriend"
+
+        //fitbit
+        const val create_pkce = "$api_version/delete_geofence_byfriend"
+
 
         const val friend_added = 1
         const val are_friend = 2

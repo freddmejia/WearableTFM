@@ -51,6 +51,12 @@
     <string name="geozone_alert_title">Quieres guardar esta gezona para: </string>
     <string name="title_add_friend">Agrega un amigo</string>
 
+    <!-- FITBIT resources -->
+    <string name="fitbit_client_id">23QYFW</string>
+    <string name="fitbit_client_secret">24777e6d7ba496cdbb6de070e3038ab8</string>
+    <string name="fitbit_redirect_url">https://18.234.175.136/</string>
+    <string name="fitbit_secure_key"></string>
+
     <!-- errors -->
     <string name="error_fill">LLena todos los campos</string>
     <string name="error_medicine_detail">No puede existir dos dias iguales</string>
@@ -58,4 +64,6 @@
     <string name="error_not_day_medicine">Debes escoger un dia de la toma de tu medicina</string>
     <string name="error_no_data">No hay datos</string>
     <string name="error_data">Hay datos</string>
+    
+    
 </resources>
