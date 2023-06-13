@@ -50,6 +50,8 @@
     <string name="find_friend">Agrega un amigo</string>
     <string name="geozone_alert_title">Quieres guardar esta gezona para: </string>
     <string name="title_add_friend">Agrega un amigo</string>
+    <string name="my_wearables">Mis wearables</string>
+    <string name="add_wearable">Agrega un wearable</string>
 
     <!-- FITBIT resources -->
     <string name="fitbit_client_id">23QYFW</string>

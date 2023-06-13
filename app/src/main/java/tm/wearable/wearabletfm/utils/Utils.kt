@@ -8,7 +8,8 @@ import java.util.HashMap
 class Utils {
     companion object {
         const val api_version = "/api"
-        const val domainApi = "http://192.168.1.16:8000/"
+        //const val domainApi = "http://192.168.1.16:8000/"
+        const val domainApi = "http://18.234.175.136/"
         const val domainApiFitbit = "https://www.fitbit.com/"
         const val oauthFitbit = "/oauth2"
 
@@ -42,7 +43,7 @@ class Utils {
         const val delete_geofence_byfriend = "$api_version/delete_geofence_byfriend"
 
         //fitbit
-        const val create_pkce = "$api_version/delete_geofence_byfriend"
+        const val fitbit_oauth = "$api_version/fitbit_oauth"
 
 
         const val friend_added = 1

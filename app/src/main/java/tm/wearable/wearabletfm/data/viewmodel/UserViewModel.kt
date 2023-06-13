@@ -6,6 +6,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
+import tm.wearable.wearabletfm.data.model.FitbitOauth
 import tm.wearable.wearabletfm.data.model.Health
 import tm.wearable.wearabletfm.data.model.User
 import tm.wearable.wearabletfm.data.model.shortUser
@@ -26,6 +27,10 @@ class UserViewModel  @Inject constructor(
 
     private val _compositionUpdateHealthUser = MutableStateFlow<Result<CompositionObj<Health, String>>>(Result.Empty)
     val compositionUpdateHealthUser :  StateFlow<Result<CompositionObj<Health, String>>> = _compositionUpdateHealthUser
+
+    private val _compositionFitbitOauth = MutableStateFlow<Result<CompositionObj<FitbitOauth, String>>>(Result.Empty)
+    val compositionFitbitOauth :  StateFlow<Result<CompositionObj<FitbitOauth, String>>> = _compositionFitbitOauth
+
 
     private val _loadingProgress = MutableStateFlow(false)
     val loadingProgress: StateFlow<Boolean> = _loadingProgress
@@ -55,6 +60,13 @@ class UserViewModel  @Inject constructor(
         _compositionUpdateHealthUser.value = Result.Empty
         _loadingProgress.value = true
         _compositionUpdateHealthUser.value = userRepository.update_health_user(height = height, weight = weight, birthay = birthay)
+        _loadingProgress.value = false
+    }
+
+    fun fitbit_oauth(user_id: String) = viewModelScope.launch {
+        _compositionFitbitOauth.value = Result.Empty
+        _loadingProgress.value = true
+        _compositionFitbitOauth.value = userRepository.fitbit_oauth(user_id = user_id)
         _loadingProgress.value = false
     }
 

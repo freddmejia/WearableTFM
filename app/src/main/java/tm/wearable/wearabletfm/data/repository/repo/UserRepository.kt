@@ -2,9 +2,11 @@ package tm.wearable.wearabletfm.data.repository.repo
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import tm.wearable.wearabletfm.data.model.FitbitOauth
 import tm.wearable.wearabletfm.data.model.Health
 import tm.wearable.wearabletfm.data.model.User
 import tm.wearable.wearabletfm.data.model.shortUser
+import tm.wearable.wearabletfm.data.repository.api.FitbitResponseApi
 import tm.wearable.wearabletfm.data.repository.datasource.remote.UserRemoteDataSource
 import tm.wearable.wearabletfm.utils.CompositionObj
 import java.lang.Exception
@@ -95,6 +97,30 @@ class UserRepository  @Inject constructor(
                 val body = response.body()
                 if (body != null) {
                     val ab = CompositionObj(response.body()!!.health_data, response.body()!!.message)
+                    Result.Success(ab)
+                }
+                else{
+                    errorResult( message = "",errorBody = response.errorBody()!!)
+                }
+            }catch (e: Exception){
+                errorResult(message = e.message ?: e.toString())
+            }
+        }
+    }
+
+    suspend fun fitbit_oauth(user_id: String): Result<CompositionObj<FitbitOauth, String>> {
+        return withContext(Dispatchers.Default){
+            try {
+                val requestBody: MutableMap<String, String> = HashMap()
+                requestBody["user_id"] = user_id
+                val response = userRemoteDataSource.fitbitOAuth(requestBody = requestBody)
+                val body = response.body()
+                if (body != null) {
+                    val fitbitOauth = FitbitOauth(codeVerifier = response.body()!!.codeVerifier,
+                        codeChallenge = response.body()!!.codeChallenge,
+                        url = response.body()!!.url
+                    )
+                    val ab = CompositionObj(fitbitOauth, "")
                     Result.Success(ab)
                 }
                 else{

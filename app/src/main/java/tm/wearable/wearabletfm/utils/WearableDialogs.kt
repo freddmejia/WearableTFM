@@ -1,11 +1,15 @@
 package tm.wearable.wearabletfm.utils
 
+import android.annotation.SuppressLint
 import android.app.DatePickerDialog
 import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
+import android.graphics.Color
 import android.os.Build
+import android.util.Log
 import android.view.LayoutInflater
+import android.webkit.*
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -26,6 +30,7 @@ import tm.wearable.wearabletfm.data.model.Friend
 import tm.wearable.wearabletfm.data.model.Health
 import tm.wearable.wearabletfm.databinding.AddGeozoneAlertBinding
 import tm.wearable.wearabletfm.databinding.FriendAlertBinding
+import tm.wearable.wearabletfm.databinding.OauthFitbitAlertBinding
 import tm.wearable.wearabletfm.databinding.UpdateHealthAlertBinding
 import java.text.SimpleDateFormat
 import java.time.Instant
@@ -180,6 +185,49 @@ class WearableDialogs {
             alertDialogBuilder.show()
             alertDialogBuilder.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(context.resources.getColor(R.color.red))
             alertDialogBuilder.getButton(Dialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.blue_a7))
+        }
+
+        fun openURLEnWebView(context: Context, url: String) {
+
+            val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(context).setCancelable(false).create()
+            val binding = OauthFitbitAlertBinding.bind(LayoutInflater.from(context).inflate(R.layout.oauth_fitbit_alert,null))
+            binding.webView.settings.javaScriptEnabled = true
+            binding.webView.settings.domStorageEnabled = true
+            binding.webView.settings.javaScriptCanOpenWindowsAutomatically = true
+
+            //binding.webView.apply {
+                // Configurar el WebViewClient para cargar la URL dentro del WebView
+                binding.webView.webViewClient = object : WebViewClient() {
+                    @SuppressLint("TrustAllX509TrustManager")
+                    override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: android.net.http.SslError?) {
+                        Log.e("", "onReceivedSslError: ", )
+                        handler?.proceed() // Permitir todos los errores de SSL
+                    }
+
+                    override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
+                        Log.e("", "shouldOverrideUrlLoading: ", )
+                        view.loadUrl(url)
+                        return true
+                    }
+
+                    override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
+                        Log.e("WebView", "Error: $errorCode, Description: $description, URL: $failingUrl")
+                    }
+                }
+
+                // Cargar la URL en el WebView
+                //loadUrl(url)
+            //}
+            binding.webView.loadUrl(url)
+
+            alertDialogBuilder.setButton(Dialog.BUTTON_NEGATIVE,context.resources.getString(R.string.cancel),
+                DialogInterface.OnClickListener { dialogInterface, i ->
+                    dialogInterface.dismiss()
+                })
+
+            alertDialogBuilder.setView(binding.root)
+            alertDialogBuilder.show()
+            alertDialogBuilder.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
         }
     }
 
