@@ -9,7 +9,7 @@ class Utils {
     companion object {
         const val api_version = "/api"
         //const val domainApi = "http://192.168.1.16:8000/"
-        const val domainApi = "http://18.234.175.136/"
+        const val domainApi = "http://52.54.33.62/"
         const val domainApiFitbit = "https://www.fitbit.com/"
         const val oauthFitbit = "/oauth2"
 

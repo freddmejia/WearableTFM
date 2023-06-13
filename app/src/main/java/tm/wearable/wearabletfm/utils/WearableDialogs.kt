@@ -32,12 +32,18 @@ import tm.wearable.wearabletfm.databinding.AddGeozoneAlertBinding
 import tm.wearable.wearabletfm.databinding.FriendAlertBinding
 import tm.wearable.wearabletfm.databinding.OauthFitbitAlertBinding
 import tm.wearable.wearabletfm.databinding.UpdateHealthAlertBinding
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
 import java.text.SimpleDateFormat
 import java.time.Instant
 import java.time.LocalDate
 import java.time.ZoneId
 import java.time.format.DateTimeFormatter
 import java.util.*
+import javax.net.ssl.HttpsURLConnection
+import javax.net.ssl.SSLContext
+import javax.net.ssl.TrustManager
+import javax.net.ssl.X509TrustManager
 
 class WearableDialogs {
     companion object {
@@ -191,6 +197,22 @@ class WearableDialogs {
 
             val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(context).setCancelable(false).create()
             val binding = OauthFitbitAlertBinding.bind(LayoutInflater.from(context).inflate(R.layout.oauth_fitbit_alert,null))
+
+            // Crear un objeto de confianza SSL personalizado que no realiza ninguna verificación
+            val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
+                override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+                    // No realizar ninguna verificación
+                }
+
+                override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+                    // No realizar ninguna verificación
+                }
+
+                override fun getAcceptedIssuers(): Array<X509Certificate> {
+                    return arrayOf() // No emitir certificados de confianza
+                }
+            })
+
             binding.webView.settings.javaScriptEnabled = true
             binding.webView.settings.domStorageEnabled = true
             binding.webView.settings.javaScriptCanOpenWindowsAutomatically = true
@@ -198,7 +220,6 @@ class WearableDialogs {
             //binding.webView.apply {
                 // Configurar el WebViewClient para cargar la URL dentro del WebView
                 binding.webView.webViewClient = object : WebViewClient() {
-                    @SuppressLint("TrustAllX509TrustManager")
                     override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: android.net.http.SslError?) {
                         Log.e("", "onReceivedSslError: ", )
                         handler?.proceed() // Permitir todos los errores de SSL
@@ -218,6 +239,12 @@ class WearableDialogs {
                 // Cargar la URL en el WebView
                 //loadUrl(url)
             //}
+            // Configurar la fábrica de confianza SSL personalizada
+            val sslContext = SSLContext.getInstance("TLS")
+            sslContext.init(null, trustAllCerts, SecureRandom())
+            HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.socketFactory)
+            HttpsURLConnection.setDefaultHostnameVerifier { _, _ -> true } // Aceptar todos los nombres de host
+
             binding.webView.loadUrl(url)
 
             alertDialogBuilder.setButton(Dialog.BUTTON_NEGATIVE,context.resources.getString(R.string.cancel),
