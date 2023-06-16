@@ -71,7 +71,7 @@ class FriendViewModel @Inject constructor(
     }
 
     fun fetch_friends(user_id: String) = viewModelScope.launch {
-        _compositionFriendRequest.value = Result.Empty
+        _compositionFetchPossibleFriends.value = Result.Empty
         _loadingProgress.value = true
         _compositionFetchPossibleFriends.value = friendRepository.fetch_friends(user_id = user_id)
         _loadingProgress.value = false
@@ -109,7 +109,6 @@ class FriendViewModel @Inject constructor(
         _compositionFetchPossibleFriends.value = Result.Empty
         delay(200)
         _compositionFetchPossibleFriends.value = state
-        Log.e("COROUTINES", "set_compositionFetchPossibleFriends22: $_compositionFetchPossibleFriends.value")
 
     }
 

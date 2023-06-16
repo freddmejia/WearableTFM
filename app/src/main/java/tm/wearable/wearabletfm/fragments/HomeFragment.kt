@@ -183,9 +183,13 @@ class HomeFragment: Fragment(R.layout.home_fragment), UIUserProfile, UIUserHealt
                 when(result) {
                     is tm.wearable.wearabletfm.utils.Result.Success<CompositionObj<ArrayList<Medicine>, String>> ->{
                         medicinesLittleAdapter.setNewData(result.data.data)
+                        binding?.rvMedicines?.isVisible = true
+                        binding?.noData?.isVisible = false
                     }
-                    is tm.wearable.wearabletfm.utils.Result.Error ->
-                        showToast(message = result.error)
+                    is tm.wearable.wearabletfm.utils.Result.Error -> {
+                        binding?.rvMedicines?.isVisible = false
+                        binding?.noData?.isVisible = true
+                    }
                     else -> Unit
                 }
             }

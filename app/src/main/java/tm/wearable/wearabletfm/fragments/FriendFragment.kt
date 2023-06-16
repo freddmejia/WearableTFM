@@ -85,7 +85,6 @@ class FriendFragment: Fragment(R.layout.friend_fragment), UIObserverGeneric<Frie
     }
 
     fun api() {
-        Log.e("", "api: user " +user.id.toString() )
         acceptOrDeleteFriend = 0
         friendViewModel.fetch_friends(user_id = user.id.toString())
         friendViewModel.fetch_friends_request()
@@ -121,7 +120,7 @@ class FriendFragment: Fragment(R.layout.friend_fragment), UIObserverGeneric<Frie
                         binding?.placeholder?.isVisible = false
                     }
                     is Result.Error -> {
-                        showToast(message = result.error)
+                        //showToast(message = result.error)
                         binding?.rvMyFriends?.isVisible = false
                         binding?.placeholder?.isVisible = true
                         binding?.title?.text = resources.getString(R.string.dont_have_friends)
@@ -188,7 +187,6 @@ class FriendFragment: Fragment(R.layout.friend_fragment), UIObserverGeneric<Frie
                                     )
                                 )
                         )
-
                         showToast(message = result.data.message)
 
                     }

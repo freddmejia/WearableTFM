@@ -62,14 +62,11 @@ class FriendRepository @Inject constructor(
                 requestBody["user_id"] = user_id
                 val response = friendRemoteDataSource.fetchFriends(requestBody = requestBody)
                 val body = response.body()
-                Log.e("", "fetch_friends: " +body.toString() )
                 if (body != null) {
                     val ab = CompositionObj(response.body()!!.friends, response.body()!!.message)
                     Result.Success(ab)
                 }
                 else{
-                    Log.e("", "fetch_friends: " +response.errorBody()?.string() )
-
                     Utils.errorResult( message = "",errorBody = response.errorBody()!!)
                 }
             }catch (e: Exception){
@@ -91,7 +88,6 @@ class FriendRepository @Inject constructor(
                     Result.Success(ab)
                 }
                 else{
-                    //val errorBody = (response.errorBody() as HttpException).response()?.errorBody()?.string()
                     Utils.errorResult( message = "",errorBody = response.errorBody()!!)
                 }
             }catch (e: Exception){

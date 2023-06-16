@@ -20,10 +20,13 @@ import tm.wearable.wearabletfm.data.repository.repo.UserRepository
 import javax.inject.Named
 import javax.inject.Singleton
 import tm.wearable.wearabletfm.R
+import tm.wearable.wearabletfm.data.repository.api.DeviceServiceRemote
 import tm.wearable.wearabletfm.data.repository.api.FriendServiceRemote
 import tm.wearable.wearabletfm.data.repository.api.MedicineServiceRemote
+import tm.wearable.wearabletfm.data.repository.datasource.remote.DeviceRemoteDatasource
 import tm.wearable.wearabletfm.data.repository.datasource.remote.FriendRemoteDataSource
 import tm.wearable.wearabletfm.data.repository.datasource.remote.MedicineRemoteDataSource
+import tm.wearable.wearabletfm.data.repository.repo.DeviceRepository
 import tm.wearable.wearabletfm.data.repository.repo.FriendRepository
 import tm.wearable.wearabletfm.data.repository.repo.MedicineRepository
 
@@ -100,5 +103,17 @@ object AppModule {
     @Provides
     fun provideFriendRepository(friendRemoteDataSource: FriendRemoteDataSource) = FriendRepository(friendRemoteDataSource)
 
+
+    //wearable
+    @Provides
+    fun provideDeviceService(@Named("api") retrofit: Retrofit): DeviceServiceRemote = retrofit.create(DeviceServiceRemote::class.java)
+
+    @Singleton
+    @Provides
+    fun provideDeviceRemoteDataSource(deviceServiceRemote: DeviceServiceRemote) = DeviceRemoteDatasource(deviceServiceRemote)
+
+    @Singleton
+    @Provides
+    fun provideDeviceRepository(deviceRemoteDatasource: DeviceRemoteDatasource) = DeviceRepository(deviceRemoteDatasource)
 
 }

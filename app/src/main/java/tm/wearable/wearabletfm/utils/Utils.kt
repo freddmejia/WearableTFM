@@ -1,15 +1,18 @@
 package tm.wearable.wearabletfm.utils
 
+import android.util.Log
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
+import java.text.SimpleDateFormat
+import java.time.format.DateTimeFormatter
 import java.util.HashMap
 
 class Utils {
     companion object {
         const val api_version = "/api"
-        //const val domainApi = "http://192.168.1.16:8000/"
-        const val domainApi = "http://52.54.33.62/"
+        const val domainApi = "http://192.168.1.16:8000/"
+        //const val domainApi = "http://52.54.33.62/"
         const val domainApiFitbit = "https://www.fitbit.com/"
         const val oauthFitbit = "/oauth2"
 
@@ -45,7 +48,14 @@ class Utils {
         //fitbit
         const val fitbit_oauth = "$api_version/fitbit_oauth"
 
+        //wearables
+        const val fetch_devices = "$api_version/fetch_devices"
+        const val fetch_metrics_by_user_date = "$api_version/fetch_metrics_by_user_date"
+        const val fetch_last_metrics_by_user = "$api_version/fetch_last_metrics_by_user"
+        const val fetch_metrics_by_user_type_date = "$api_version/fetch_metrics_by_user_type_date"
 
+
+        const val batteryLevelMin = 30
         const val friend_added = 1
         const val are_friend = 2
         const val friend_cancel = 3
@@ -69,6 +79,7 @@ class Utils {
                 val json = JSONObject(errorBody?.string())
                 mess_d = json.getString("message")
             }
+            Log.e("", "coroutines errorResult: "+mess_d.toString() )
             return Result.Error(mess_d)
         }
 
@@ -79,6 +90,14 @@ class Utils {
             jsonObject.put("day",day.toString())
             jsonArray.put(jsonObject)
             return jsonObject
+        }
+
+        fun convertDateFormat(dateTime: String): String {
+            val inputFormat = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+            val outputFormat = SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+
+            val date = inputFormat.parse(dateTime)
+            return outputFormat.format(date)
         }
     }
 }

@@ -1,6 +1,109 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+            <RelativeLayout
+                android:id="@+id/rlMyFriends"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible">
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="15sp">
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wearables_my_data"
+                        style="@style/bold_medium"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10sp"
+                        android:layout_marginTop="20sp"
+
+                        />
+                    <com.google.android.material.card.MaterialCardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        app:cardCornerRadius="18sp"
+                        android:layout_marginBottom="10sp">
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical">
+                            <TextView
+                                android:id="@+id/noData"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="@string/error_no_data"
+                                style="@style/bold_medium"
+                                android:layout_gravity="center"
+                                android:layout_marginVertical="10sp"
+                                android:layout_marginHorizontal="20sp"
+                                android:visibility="gone"
+                                />
+                            <androidx.recyclerview.widget.RecyclerView
+                                android:id="@+id/rvMetrics"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:padding="10sp"/>
+                            <com.google.android.material.card.MaterialCardView
+                                android:id="@+id/cvAccessData"
+                                android:layout_width="48sp"
+                                android:layout_height="48sp"
+                                android:backgroundTint="@color/green_92"
+                                app:cardCornerRadius="50sp"
+                                app:strokeWidth="1sp"
+                                android:clickable="true"
+                                android:focusable="true"
+                                android:checkable="true"
+                                android:layout_gravity="end"
+                                android:layout_marginEnd="15sp"
+                                android:layout_marginBottom="10sp"
+                                android:elevation="5sp"
+                                >
+                                <ImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:src="@drawable/arrow_left_icon"
+                                    android:padding="10sp"
+                                    />
+                            </com.google.android.material.card.MaterialCardView>
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/wearables_my_friends_data"
+                        style="@style/bold_medium"
+                        android:layout_gravity="center"
+                        android:layout_marginBottom="10sp"
+                        android:layout_marginTop="20sp"
+
+                        />
+                </LinearLayout>
+            </RelativeLayout>
+
+
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+</RelativeLayout>
