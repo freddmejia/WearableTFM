@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
+import tm.wearable.wearabletfm.DetailDataActivity
 import tm.wearable.wearabletfm.R
 import tm.wearable.wearabletfm.data.adapter.DeviceAdapter
 import tm.wearable.wearabletfm.data.adapter.MetricsGeneralAdapter
@@ -65,7 +66,7 @@ class DataFragment : Fragment(R.layout.data_fragment) {
 
     fun events() {
         binding?.cvAccessData?.setOnClickListener {
-            //startActivity(Intent(this@DataFragment.requireContext(), ))
+            startActivity(Intent(this@DataFragment.requireContext(),DetailDataActivity::class.java ))
         }
     }
 

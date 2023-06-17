@@ -61,6 +61,7 @@
 
     <string name="last_sync">Última sincronización:</string>
     <string name="percentage">%</string>
+    <string name="datos_detail">Mis datos</string>
 
     <!-- WEARABLES -->
     <string name="wearables_my_data">Mis datos</string>
@@ -73,6 +74,6 @@
     <string name="error_not_day_medicine">Debes escoger un dia de la toma de tu medicina</string>
     <string name="error_no_data">No hay datos</string>
     <string name="error_data">Hay datos</string>
-    
-    
+
+
 </resources>
