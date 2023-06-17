@@ -43,7 +43,7 @@
                     android:id="@+id/calendar"
                     android:layout_width="43sp"
                     android:layout_height="43sp"
-                    android:src="@drawable/ic_launcher_background"
+                    android:src="@drawable/calendar_icon"
                     android:padding="7sp"
                     android:visibility="gone"/>
 

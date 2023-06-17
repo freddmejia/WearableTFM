@@ -10,11 +10,20 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import tm.wearable.wearabletfm.data.adapter.CalendarAdapter
+import tm.wearable.wearabletfm.data.adapter.MetricsGeneralAdapter
+import tm.wearable.wearabletfm.data.adapter.MetricsGeneralDetailAdapter
+import tm.wearable.wearabletfm.data.interfaces.UICDay
+import tm.wearable.wearabletfm.data.interfaces.UIMetric
 import tm.wearable.wearabletfm.data.model.CDay
 import tm.wearable.wearabletfm.data.model.Metrics
 import tm.wearable.wearabletfm.data.model.User
@@ -22,17 +31,21 @@ import tm.wearable.wearabletfm.data.viewmodel.CalendarViewModel
 import tm.wearable.wearabletfm.data.viewmodel.DeviceViewModel
 import tm.wearable.wearabletfm.databinding.ActivityDetailDataBinding
 import tm.wearable.wearabletfm.databinding.MainToolbarBinding
+import tm.wearable.wearabletfm.utils.CDayUtils
 import tm.wearable.wearabletfm.utils.CompositionObj
+import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
 
-class DetailDataActivity : AppCompatActivity() {
+import tm.wearable.wearabletfm.utils.*
+@AndroidEntryPoint
+class DetailDataActivity : AppCompatActivity(), UICDay, UIMetric {
     private lateinit var binding: ActivityDetailDataBinding
     private lateinit var toolbarAppBinding: MainToolbarBinding
     private val deviceViewModel: DeviceViewModel by viewModels()
     private lateinit var adapterCalendar: CalendarAdapter
     private var daysCalendar : ArrayList<CDay> = arrayListOf()
-
+    private lateinit var metricsGeneralDetailAdapter: MetricsGeneralDetailAdapter
     private var firstDate = GregorianCalendar()
     private var lastDate = GregorianCalendar()
     private var actualDate = GregorianCalendar()
@@ -53,11 +66,20 @@ class DetailDataActivity : AppCompatActivity() {
         binding.rvCalendar.layoutManager = GridLayoutManager(this, 1, GridLayoutManager.HORIZONTAL, false)
         binding.rvCalendar.adapter = adapterCalendar
 
-        val prefsUser = .getSharedPreferences(
-            resources.getString(R.string.title_preference_file),
+
+
+        metricsGeneralDetailAdapter = MetricsGeneralDetailAdapter(context = this, list =  arrayListOf(), observer = this)
+        binding.rvData.layoutManager = GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false)
+        binding.rvData.adapter = metricsGeneralDetailAdapter
+
+
+        val prefsUser = getSharedPreferences(
+            resources.getString(R.string.shared_preferences),
             Context.MODE_PRIVATE
         )
         user = User(JSONObject(prefsUser!!.getString("user","")))
+
+        intent?.extras?.let { getExtraDeviceData(it) }
 
         events()
         coroutines()
@@ -65,7 +87,30 @@ class DetailDataActivity : AppCompatActivity() {
     }
 
     fun events() {
+        binding?.ivArrowLeft?.setOnClickListener {
+            if (daysCalendar.isNotEmpty()) {
+                firstDate = GregorianCalendar()
+                firstDate = CDayUtils.getDateByNumber(dateSelected = daysCalendar.get(0).date, number = -1)
+                calendarViewModel.getActualWeek(dateSelected = firstDate, isPrevious = true)
+            }
+        }
 
+        binding?.ivArrowRight?.setOnClickListener {
+            if (daysCalendar.isNotEmpty()){
+                lastDate = GregorianCalendar()
+                lastDate = CDayUtils.getDateByNumber(daysCalendar.get(daysCalendar.size -1).date, number = +1)
+                val temp = GregorianCalendar()
+                temp.time = lastDate.time
+                temp.add(Calendar.DATE, +6)
+                actualDate = GregorianCalendar()
+                if (temp.time < actualDate.time) {
+                    calendarViewModel.getActualWeek(dateSelected = lastDate, isPrevious = false, dateToSelect = actualDate)
+                }
+                else{
+                    calendarViewModel.getActualWeek(dateSelected = actualDate, isPrevious = true, dateToSelect = actualDate)
+                }
+            }
+        }
     }
 
     fun coroutines() {
@@ -73,23 +118,56 @@ class DetailDataActivity : AppCompatActivity() {
         lifecycleScope.launchWhenCreated {
             deviceViewModel.compositionMetrics.collect { result->
                 when(result){
-                    is tm.wearable.wearabletfm.utils.Result.Success<CompositionObj<ArrayList<Metrics>, String>> ->{
-                        metricsGeneralAdapter.setNewData(arrayList = result.data.data)
+                    is Result.Success<CompositionObj<ArrayList<Metrics>, String>> ->{
 
-                        binding?.rvMetrics?.isVisible = true
-                        binding?.cvAccessData?.isVisible = true
+                        metricsGeneralDetailAdapter.setNewData(result.data.data)
+                        binding?.rvData?.isVisible = true
                         binding?.noData?.isVisible = false
 
                     }
                     is tm.wearable.wearabletfm.utils.Result.Error -> {
-                        showToast(message = result.error)
 
-                        binding?.rvMetrics?.isVisible = false
+                        binding?.rvData?.isVisible = false
                         binding?.noData?.isVisible = true
-                        binding?.cvAccessData?.isVisible = true
                     }
                     else -> Unit
                 }
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                calendarViewModel.cDays.collect{
+                    if (it.size > 0){
+                        daysCalendar.clear()
+                        daysCalendar.addAll(it)
+                        adapterCalendar.setNewData(daysCalendar)
+                    }
+                }
+            }
+        }
+
+        lifecycleScope.launchWhenCreated {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                calendarViewModel.SelectedDate.observe(this@DetailDataActivity, androidx.lifecycle.Observer {  dateS ->
+                    when (dateS) {
+                        is Result.Success<*> -> {
+                            if (dateS != null) {
+                                val result = dateS.data as CalendarViewModel.selectedCalendarByView
+                                actualDate = result.date
+                                if (result.isSelected) //is date selected by activity
+                                {
+                                    calendarViewModel.getActualWeek(
+                                        dateSelected = actualDate,
+                                        isPrevious = false,
+                                        dateToSelect = actualDate
+                                    )
+                                }
+                            }
+                        }
+                        else -> Unit
+                    }
+                })
             }
         }
 
@@ -118,8 +196,7 @@ class DetailDataActivity : AppCompatActivity() {
         toolbarAppBinding = MainToolbarBinding.bind(binding.root)
         setSupportActionBar(toolbarAppBinding.toolbar)
         toolbarAppBinding.titleBar.text = resources.getString(R.string.datos_detail)
-        toolbarAppBinding.profile.isVisible = false
-        toolbarAppBinding.calendar.isVisible = false
+        toolbarAppBinding.calendar.isVisible = true
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
     }
@@ -134,6 +211,57 @@ class DetailDataActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onClick(cDay: CDay) {
+        daysCalendar.forEach {
+            it.isSelected = false
+            if (it.date == cDay.date){
+                it.isSelected = true
+            }
+        }
+        adapterCalendar.setNewData(daysCalendar)
+    }
+
+    override fun dateChange(cDay: CDay) {
+        calendarViewModel.dateSelected(dateSelected = cDay.date)
+        deviceViewModel.fetch_metrics_by_user_date(
+            user_id = user.id.toString(),
+            date = SimpleDateFormat("yyyy-MM-dd").format(cDay.date.time)
+        )
+    }
+
+    override fun onClick(metrics: Metrics) {
+        try {
+
+            val dateSelected = daysCalendar.filter { it.isSelected }.single()
+            val intent = Intent(this, SubDetailDataActivity::class.java)
+            intent.putExtra("data", Gson().toJson(metrics))
+            intent.putExtra("date_start", SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(daysCalendar.get(0).date.time))
+            intent.putExtra(
+                "date_selected",
+                SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(dateSelected.date.time)
+            )
+            startActivity(intent)
+        }catch (e: java.lang.Exception){
+
+        }
+    }
+
+    fun getExtraDeviceData(bundle: Bundle){
+        if (bundle != null){
+            try {
+                 val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale("es","ES"))
+                dateSelected.time = formatter.parse(bundle.getString("date_selected").toString())
+
+                var date_start = GregorianCalendar()
+                date_start.time = formatter.parse(bundle.getString("date_start").toString())
+
+                actualDate = dateSelected
+                calendarViewModel.getActualWeek(dateSelected = date_start, isPrevious = false, dateToSelect = actualDate)
+            }catch (e: java.lang.Exception){
+                Log.e("", "getExtraDeviceData: "+e.message )
+            }
+        }
+    }
 
 
 }

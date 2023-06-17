@@ -12,12 +12,14 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import tm.wearable.wearabletfm.DetailDataActivity
 import tm.wearable.wearabletfm.R
 import tm.wearable.wearabletfm.data.adapter.DeviceAdapter
 import tm.wearable.wearabletfm.data.adapter.MetricsGeneralAdapter
+import tm.wearable.wearabletfm.data.interfaces.UIMetric
 import tm.wearable.wearabletfm.data.model.Device
 import tm.wearable.wearabletfm.data.model.FitbitOauth
 import tm.wearable.wearabletfm.data.model.Metrics
@@ -28,9 +30,11 @@ import tm.wearable.wearabletfm.databinding.DataFragmentBinding
 import tm.wearable.wearabletfm.databinding.WearableFragmentBinding
 import tm.wearable.wearabletfm.utils.CompositionObj
 import tm.wearable.wearabletfm.utils.WearableDialogs
+import java.text.SimpleDateFormat
+import java.util.GregorianCalendar
 
 @AndroidEntryPoint
-class DataFragment : Fragment(R.layout.data_fragment) {
+class DataFragment : Fragment(R.layout.data_fragment), UIMetric {
     private var binding: DataFragmentBinding? = null
     private lateinit var toast: Toast
     private val deviceViewModel: DeviceViewModel by viewModels()
@@ -54,7 +58,7 @@ class DataFragment : Fragment(R.layout.data_fragment) {
         )
         user = User(JSONObject(prefsUser!!.getString("user","")))
 
-        metricsGeneralAdapter = MetricsGeneralAdapter(context = this@DataFragment.requireContext(), list =  arrayListOf())
+        metricsGeneralAdapter = MetricsGeneralAdapter(context = this@DataFragment.requireContext(), list =  arrayListOf(), observer = this)
         binding?.rvMetrics?.layoutManager = LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         binding?.rvMetrics?.adapter = metricsGeneralAdapter
         binding?.rvMetrics?.setHasFixedSize(true)
@@ -66,7 +70,15 @@ class DataFragment : Fragment(R.layout.data_fragment) {
 
     fun events() {
         binding?.cvAccessData?.setOnClickListener {
-            startActivity(Intent(this@DataFragment.requireContext(),DetailDataActivity::class.java ))
+            val actualDate = GregorianCalendar()
+            val intent =
+                Intent(this@DataFragment.requireContext(), DetailDataActivity::class.java)
+            intent.putExtra("date_start", SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(actualDate.time))
+            intent.putExtra(
+                "date_selected",
+                SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(actualDate.time)
+            )
+            startActivity(intent)
         }
     }
 
@@ -113,5 +125,9 @@ class DataFragment : Fragment(R.layout.data_fragment) {
     fun callApi(){
         Log.e("", "callApi: "+user.id.toString() )
         deviceViewModel.fetch_last_metrics_by_user(user_id = user.id.toString())
+    }
+
+    override fun onClick(metrics: Metrics) {
+
     }
 }

@@ -1,8 +1,11 @@
 package tm.wearable.wearabletfm
 
+import android.app.DatePickerDialog
+import android.content.Intent
 import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.ImageView
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -11,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
 import dagger.hilt.android.AndroidEntryPoint
+import tm.wearable.wearabletfm.data.viewmodel.CalendarViewModel
 import tm.wearable.wearabletfm.data.viewmodel.UserViewModel
 import tm.wearable.wearabletfm.databinding.ActivityLoginBinding
 import tm.wearable.wearabletfm.databinding.ActivityMainAppBinding
@@ -20,12 +24,17 @@ import tm.wearable.wearabletfm.fragments.DataFragment
 import tm.wearable.wearabletfm.fragments.FriendFragment
 import tm.wearable.wearabletfm.fragments.HomeFragment
 import tm.wearable.wearabletfm.fragments.WearableFragment
+import java.text.SimpleDateFormat
+import java.util.*
 
+import tm.wearable.wearabletfm.utils.*
 @AndroidEntryPoint
 class MainAppActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainAppBinding
     private lateinit var toolbarAppBinding: MainToolbarBinding
     private lateinit var bottomBarBinding: BottomBarBinding
+    private var dateSelected = GregorianCalendar()
+    private val calendarViewModel: CalendarViewModel by viewModels()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainAppBinding.inflate(layoutInflater)
@@ -36,6 +45,7 @@ class MainAppActivity : AppCompatActivity() {
         setSupportActionBar(toolbarAppBinding.toolbar)
 
         events()
+        coroutines()
         chooseSelectionMenu(fragment = HomeFragment.newInstance())
     }
 
@@ -53,6 +63,42 @@ class MainAppActivity : AppCompatActivity() {
         bottomBarBinding.rvData.setOnClickListener {
             chooseSelectionMenu(fragment = DataFragment.newInstance())
         }
+
+
+
+        toolbarAppBinding.calendar.setOnClickListener {
+            if (dateSelected == null)
+                dateSelected = GregorianCalendar()
+            val year = dateSelected.get(Calendar.YEAR)
+            val month = dateSelected.get(Calendar.MONTH)
+            val day = dateSelected.get(Calendar.DAY_OF_MONTH)
+            val dpd = DatePickerDialog(this@MainAppActivity, DatePickerDialog.OnDateSetListener{
+                    view, year, monthOfYear, dayOfMonth ->
+                val newC = GregorianCalendar()
+                newC.set(GregorianCalendar.YEAR, year)
+                newC.set(GregorianCalendar.MONTH, monthOfYear)
+                newC.set(GregorianCalendar.DAY_OF_MONTH, dayOfMonth)
+                calendarViewModel.dateSelected(dateSelected = newC, true)
+            }, year, month, day)
+            dpd.datePicker.maxDate = GregorianCalendar().time.time
+            dpd.show()
+        }
+
+    }
+
+    fun coroutines() {
+        calendarViewModel.SelectedDate.observe(this@MainAppActivity, androidx.lifecycle.Observer { dateS ->
+            when(dateS){
+                is Result.Success<*> ->{
+                    if (dateS!= null){
+                        val result = dateS.data as CalendarViewModel.selectedCalendarByView
+                        dateSelected = result.date
+                    }
+                }
+                else -> Unit
+            }
+        })
+
     }
 
     fun chooseSelectionMenu(fragment: Fragment){

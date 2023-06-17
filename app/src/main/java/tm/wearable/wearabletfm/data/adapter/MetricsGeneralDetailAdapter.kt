@@ -1,27 +1,21 @@
 package tm.wearable.wearabletfm.data.adapter
 
 import android.content.Context
-import android.content.SyncStatusObserver
-import android.graphics.Color
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
 import androidx.recyclerview.widget.RecyclerView
 import tm.wearable.wearabletfm.R
 import tm.wearable.wearabletfm.data.interfaces.UIMetric
-import tm.wearable.wearabletfm.data.model.Device
 import tm.wearable.wearabletfm.data.model.Metrics
-import tm.wearable.wearabletfm.databinding.DeviceItemBinding
-import tm.wearable.wearabletfm.databinding.MetricsGenItemBinding
+import tm.wearable.wearabletfm.databinding.MetricsGenDetailItemBinding
 import tm.wearable.wearabletfm.utils.TypeMetrics
-import tm.wearable.wearabletfm.utils.Utils
 
-class MetricsGeneralAdapter (val context: Context, var list: List<Metrics>, val observer: UIMetric):
-    RecyclerView.Adapter<MetricsGeneralAdapter.holderAdapter>() {
+class MetricsGeneralDetailAdapter (val context: Context, var list: List<Metrics>, val observer: UIMetric):
+    RecyclerView.Adapter<MetricsGeneralDetailAdapter.holderAdapter>() {
 
-    class holderAdapter(binding: MetricsGenItemBinding): RecyclerView.ViewHolder(binding.root){
+    class holderAdapter(binding: MetricsGenDetailItemBinding): RecyclerView.ViewHolder(binding.root){
         private val binding = binding
 
         fun binData(metrics: Metrics, context: Context, observer: UIMetric){
@@ -38,7 +32,7 @@ class MetricsGeneralAdapter (val context: Context, var list: List<Metrics>, val 
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): holderAdapter {
-        val binding = MetricsGenItemBinding.bind(LayoutInflater.from(context).inflate(R.layout.metrics_gen_item,parent, false))
+        val binding = MetricsGenDetailItemBinding.bind(LayoutInflater.from(context).inflate(R.layout.metrics_gen_detail_item,parent, false))
         return holderAdapter(
             binding = binding
         )
