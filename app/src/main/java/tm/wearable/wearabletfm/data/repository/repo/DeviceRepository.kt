@@ -79,17 +79,25 @@ class DeviceRepository@Inject constructor(
         }
     }
 
-    suspend fun fetch_last_metrics_by_user_type_date(user_id: String,date: String, type: String): Result<CompositionObj<ArrayList<Metrics>, String>> {
+    suspend fun fetch_last_metrics_by_user_type_date(user_id: String,date: String, type: String, limit: String, offset: String): Result<CompositionObj<ArrayList<Metrics>, String>> {
         return withContext(Dispatchers.Default){
             try {
                 val requestBody: MutableMap<String, String> = HashMap()
                 requestBody["user_id"] = user_id
                 requestBody["type"] = type
                 requestBody["date"] = date
+                requestBody["limit"] = limit
+                requestBody["offset"] = offset
+                Log.e("", "coroutines fetch_last_metrics_by_user_type_date: "+requestBody.toString() )
                 val response = deviceRemoteDatasource.fetchLastMetricsByUserTypeDate(requestBody = requestBody)
                 val body = response.body()
+
                 if (body != null) {
-                    val ab = CompositionObj(response.body()!!.metrics, response.body()!!.message)
+                    val me = response.body()!!.metrics
+                    me.forEach {
+                        Log.e("", "coroutines fetch_last_metrics_by_user_type_date:dd "+it.type +"\n")
+                    }
+                    val ab = CompositionObj(me, response.body()!!.message)
                     Result.Success(ab)
                 }
                 else{

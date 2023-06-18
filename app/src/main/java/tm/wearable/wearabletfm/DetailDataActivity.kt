@@ -125,7 +125,7 @@ class DetailDataActivity : AppCompatActivity(), UICDay, UIMetric {
                         binding?.noData?.isVisible = false
 
                     }
-                    is tm.wearable.wearabletfm.utils.Result.Error -> {
+                    is Result.Error -> {
 
                         binding?.rvData?.isVisible = false
                         binding?.noData?.isVisible = true
@@ -179,13 +179,6 @@ class DetailDataActivity : AppCompatActivity(), UICDay, UIMetric {
         }
     }
 
-    fun showToast(message: String){
-        toast?.cancel()
-        toast = Toast.makeText(this,message, Toast.LENGTH_LONG)
-        toast.show()
-    }
-
-
     fun callApi(){
         Log.e("", "callApi: "+user.id.toString() )
         deviceViewModel.fetch_last_metrics_by_user(user_id = user.id.toString())
@@ -234,7 +227,7 @@ class DetailDataActivity : AppCompatActivity(), UICDay, UIMetric {
 
             val dateSelected = daysCalendar.filter { it.isSelected }.single()
             val intent = Intent(this, SubDetailDataActivity::class.java)
-            intent.putExtra("data", Gson().toJson(metrics))
+            intent.putExtra("metrics", Gson().toJson(metrics))
             intent.putExtra("date_start", SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(daysCalendar.get(0).date.time))
             intent.putExtra(
                 "date_selected",

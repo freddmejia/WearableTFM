@@ -1,9 +1,103 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".SubDetailDataActivity">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+        <LinearLayout
+            android:id="@+id/linear"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <include layout="@layout/main_toolbar"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginBottom="15sp"
+                android:gravity="center"
+                android:layout_margin="10sp">
+                <ImageView
+                    android:id="@+id/ivArrowLeft"
+                    android:layout_width="0dp"
+                    android:layout_height="40sp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_arrow_back_ios_24"
+                    android:focusable="true"
+                    android:clickable="true"/>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="10">
+                    <HorizontalScrollView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content">
+                        <androidx.recyclerview.widget.RecyclerView
+                            android:id="@+id/rvCalendar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center"/>
+                    </HorizontalScrollView>
+                </RelativeLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+                <ImageView
+                    android:id="@+id/ivArrowRight"
+                    android:layout_width="0dp"
+                    android:layout_height="40sp"
+                    android:layout_weight="1"
+                    android:src="@drawable/ic_baseline_arrow_forward_ios_24"
+                    android:focusable="true"
+                    android:clickable="true"/>
+            </LinearLayout>
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvData"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20sp"/>
+            <RelativeLayout
+                android:id="@+id/noData"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:layout_marginHorizontal="15sp">
+
+                    <ImageView
+                        android:id="@+id/placeholder"
+                        android:layout_width="match_parent"
+                        android:layout_height="350sp"
+                        android:src="@drawable/placeholder_smartwatch"
+                        android:layout_marginTop="25sp"
+                        android:layout_marginBottom="35sp"
+                        android:visibility="visible"
+                        />
+                    <TextView
+                        android:id="@+id/title"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/error_no_data"
+                        style="@style/normal_medium"
+                        android:gravity="center"
+                        />
+
+                </LinearLayout>
+            </RelativeLayout>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+</RelativeLayout>

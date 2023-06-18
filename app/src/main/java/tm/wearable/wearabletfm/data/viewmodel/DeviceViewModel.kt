@@ -1,5 +1,6 @@
 package tm.wearable.wearabletfm.data.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,6 +28,10 @@ class DeviceViewModel @Inject constructor(
     val compositionMetrics :  StateFlow<Result<CompositionObj<ArrayList<Metrics>, String>>> = _compositionMetrics
 
 
+    private val _compositionMetrics2 = MutableStateFlow<Result<CompositionObj<ArrayList<Metrics>, String>>>(Result.Empty)
+    val compositionMetrics2 :  StateFlow<Result<CompositionObj<ArrayList<Metrics>, String>>> = _compositionMetrics
+
+
     private val _loadingProgress = MutableStateFlow(false)
     val loadingProgress: StateFlow<Boolean> = _loadingProgress
 
@@ -52,10 +57,10 @@ class DeviceViewModel @Inject constructor(
         _loadingProgress.value = false
     }
 
-    fun fetch_last_metrics_by_user_type_date(user_id: String, date: String, type: String) = viewModelScope.launch {
-        _compositionMetrics.value = Result.Empty
+    fun fetch_last_metrics_by_user_type_date(user_id: String, date: String, type: String, limit: String, offset: String) = viewModelScope.launch {
+        _compositionMetrics2.value = Result.Empty
         _loadingProgress.value = true
-        _compositionMetrics.value = deviceRepository.fetch_last_metrics_by_user_type_date(user_id = user_id, date = date, type = type)
+        _compositionMetrics2.value = deviceRepository.fetch_last_metrics_by_user_type_date(user_id = user_id, date = date, type = type, limit = limit, offset = offset)
         _loadingProgress.value = false
     }
 }

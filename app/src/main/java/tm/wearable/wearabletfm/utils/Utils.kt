@@ -6,7 +6,7 @@ import org.json.JSONArray
 import org.json.JSONObject
 import java.text.SimpleDateFormat
 import java.time.format.DateTimeFormatter
-import java.util.HashMap
+import java.util.*
 
 class Utils {
     companion object {
@@ -70,6 +70,8 @@ class Utils {
         const val saturday = 5
         const val sunday = 6
 
+        const val paginationLimit = 4
+
         var medicinesDays: HashMap<String, Int> = HashMap()
 
         fun <T> errorResult(message: String,errorBody: ResponseBody? = null): Result<T> {
@@ -99,5 +101,7 @@ class Utils {
             val date = inputFormat.parse(dateTime)
             return outputFormat.format(date)
         }
+        fun parseShortDate(date: Date) =
+            SimpleDateFormat("yyyy-MM-dd").format(date)
     }
 }
