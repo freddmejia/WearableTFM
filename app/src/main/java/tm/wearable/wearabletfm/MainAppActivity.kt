@@ -84,6 +84,9 @@ class MainAppActivity : AppCompatActivity() {
             dpd.show()
         }
 
+        toolbarAppBinding.profile.setOnClickListener {
+            startActivity(Intent(this,NotificationsActivity::class.java))
+        }
     }
 
     fun coroutines() {

@@ -44,6 +44,8 @@ class Utils {
         const val update_geofence_friend = "$api_version/update_geofence_friend"
         const val fetch_geofence_byfriend = "$api_version/fetch_geofence_byfriend"
         const val delete_geofence_byfriend = "$api_version/delete_geofence_byfriend"
+        const val fetch_notifi_by_user = "$api_version/fetch_notifi_by_user"
+        const val delete_notification = "$api_version/delete_notification"
 
         //fitbit
         const val fitbit_oauth = "$api_version/fitbit_oauth"
@@ -71,11 +73,13 @@ class Utils {
         const val sunday = 6
 
         const val paginationLimit = 20
-
+        const val no_data = "No hay datos"
         var medicinesDays: HashMap<String, Int> = HashMap()
 
         fun <T> errorResult(message: String,errorBody: ResponseBody? = null): Result<T> {
             //Timber.d(message)
+            Log.e("", "coroutines errorResult: "+errorBody.toString() )
+
             var mess_d = message
             if (errorBody != null) {
                 val json = JSONObject(errorBody?.string())

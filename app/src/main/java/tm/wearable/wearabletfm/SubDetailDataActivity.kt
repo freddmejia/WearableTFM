@@ -34,10 +34,7 @@ import tm.wearable.wearabletfm.data.viewmodel.DeviceViewModel
 import tm.wearable.wearabletfm.databinding.ActivityDetailDataBinding
 import tm.wearable.wearabletfm.databinding.ActivitySubDetailDataBinding
 import tm.wearable.wearabletfm.databinding.MainToolbarBinding
-import tm.wearable.wearabletfm.utils.CDayUtils
-import tm.wearable.wearabletfm.utils.CompositionObj
-import tm.wearable.wearabletfm.utils.Result
-import tm.wearable.wearabletfm.utils.Utils
+import tm.wearable.wearabletfm.utils.*
 import java.lang.reflect.Type
 import java.text.SimpleDateFormat
 import java.util.*
@@ -178,7 +175,6 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
 
                         }
                         is Result.Error ->{
-                            Log.e("", "coroutines: isData "+metricsDetailAdapter.isData() )
                             if (metricsDetailAdapter.isData() ){
                                 showData()
                             }else {
@@ -244,6 +240,7 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
         setSupportActionBar(toolbarAppBinding.toolbar)
         toolbarAppBinding.titleBar.text = resources.getString(R.string.datos_detail)
         toolbarAppBinding.calendar.isVisible = true
+        toolbarAppBinding.profile.isVisible = false
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
     }
@@ -292,6 +289,7 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
     fun getExtraDeviceData(bundle: Bundle){
         if (bundle != null){
             try {
+
                 val formatter = SimpleDateFormat("dd-MM-yyyy HH:mm:ss", Locale("es","ES"))
                 dateSelected.time = formatter.parse(bundle.getString("date_selected").toString())
 
@@ -301,6 +299,7 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
                 val metricsType: Type = object : TypeToken<Metrics>() {}.type
                 metrics = Gson().fromJson(bundle.getString("metrics"),metricsType)
 
+                binding.tvMeasure.text = resources.getString(R.string.title_from) + " "+ resources.getString(R.string.title_to)+ " "+TypeMetrics.getNameSensor(metrics.type)
                 actualDate = dateSelected
                 calendarViewModel.getActualWeek(dateSelected = date_start, isPrevious = false, dateToSelect = actualDate)
             }catch (e: java.lang.Exception){

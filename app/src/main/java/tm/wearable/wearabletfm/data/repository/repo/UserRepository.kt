@@ -2,16 +2,14 @@ package tm.wearable.wearabletfm.data.repository.repo
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import tm.wearable.wearabletfm.data.model.FitbitOauth
-import tm.wearable.wearabletfm.data.model.Health
-import tm.wearable.wearabletfm.data.model.User
-import tm.wearable.wearabletfm.data.model.shortUser
+import tm.wearable.wearabletfm.data.model.*
 import tm.wearable.wearabletfm.data.repository.api.FitbitResponseApi
 import tm.wearable.wearabletfm.data.repository.datasource.remote.UserRemoteDataSource
 import tm.wearable.wearabletfm.utils.CompositionObj
 import java.lang.Exception
 import javax.inject.Inject
 import tm.wearable.wearabletfm.utils.Result
+import tm.wearable.wearabletfm.utils.Utils
 import tm.wearable.wearabletfm.utils.Utils.Companion.errorResult
 
 class UserRepository  @Inject constructor(
@@ -131,4 +129,53 @@ class UserRepository  @Inject constructor(
             }
         }
     }
+
+    suspend fun fetc_notificatio_by_user(user_id: String): Result<CompositionObj<ArrayList<Notification>, String>> {
+        return withContext(Dispatchers.Default){
+            try {
+                val requestBody: MutableMap<String, String> = HashMap()
+                requestBody["user_id"] = user_id
+                val response = userRemoteDataSource.fetchNotificationByUser(requestBody = requestBody)
+                val body = response.body()
+                if (body != null) {
+                    if (response.body()!!.notifications.isEmpty()){
+                        Result.Error(Utils.no_data)
+                    }else {
+                        val ab = CompositionObj(
+                            response.body()!!.notifications,
+                            response.body()!!.message
+                        )
+                        Result.Success(ab)
+                    }
+                }
+                else{
+                    errorResult( message = "",errorBody = response.errorBody()!!)
+                }
+            }catch (e: Exception){
+                errorResult(message = e.message ?: e.toString())
+            }
+        }
+    }
+
+    suspend fun delete_notification(notification_id: String): Result<CompositionObj<Notification, String>> {
+        return withContext(Dispatchers.Default){
+            try {
+                val requestBody: MutableMap<String, String> = HashMap()
+                requestBody["notification_id"] = notification_id
+                val response = userRemoteDataSource.deleteNotification(requestBody = requestBody)
+                val body = response.body()
+                if (body != null) {
+                    val ab = CompositionObj(response.body()!!.notification, response.body()!!.message)
+                    Result.Success(ab)
+                }
+                else{
+                    errorResult( message = "",errorBody = response.errorBody()!!)
+                }
+            }catch (e: Exception){
+                errorResult(message = e.message ?: e.toString())
+            }
+        }
+    }
+
+
 }

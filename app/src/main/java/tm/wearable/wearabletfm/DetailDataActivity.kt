@@ -190,6 +190,7 @@ class DetailDataActivity : AppCompatActivity(), UICDay, UIMetric {
         setSupportActionBar(toolbarAppBinding.toolbar)
         toolbarAppBinding.titleBar.text = resources.getString(R.string.datos_detail)
         toolbarAppBinding.calendar.isVisible = true
+        toolbarAppBinding.profile.isVisible = false
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
     }
@@ -256,5 +257,13 @@ class DetailDataActivity : AppCompatActivity(), UICDay, UIMetric {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        try {
+            intent?.extras?.let { getExtraDeviceData(it) }
+        }catch (e: java.lang.Exception){
+
+        }
+    }
 
 }

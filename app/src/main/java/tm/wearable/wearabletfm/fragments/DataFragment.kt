@@ -91,13 +91,16 @@ class DataFragment : Fragment(R.layout.data_fragment), UIMetric {
                         metricsGeneralAdapter.setNewData(arrayList = result.data.data)
 
                         binding?.rvMetrics?.isVisible = true
+                        binding?.vytalSignal?.isVisible = true
+                        binding?.cvAccessData?.isVisible = true
                         binding?.cvAccessData?.isVisible = true
                         binding?.noData?.isVisible = false
 
                     }
                     is tm.wearable.wearabletfm.utils.Result.Error -> {
                         showToast(message = result.error)
-
+                        binding?.cvAccessData?.isVisible = false
+                        binding?.vytalSignal?.isVisible = false
                         binding?.rvMetrics?.isVisible = false
                         binding?.noData?.isVisible = true
                         binding?.cvAccessData?.isVisible = true

@@ -3,13 +3,11 @@ package tm.wearable.wearabletfm.data.viewmodel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import tm.wearable.wearabletfm.data.model.FitbitOauth
-import tm.wearable.wearabletfm.data.model.Health
-import tm.wearable.wearabletfm.data.model.User
-import tm.wearable.wearabletfm.data.model.shortUser
+import tm.wearable.wearabletfm.data.model.*
 import tm.wearable.wearabletfm.data.repository.repo.UserRepository
 import tm.wearable.wearabletfm.utils.CompositionObj
 import javax.inject.Inject
@@ -30,6 +28,13 @@ class UserViewModel  @Inject constructor(
 
     private val _compositionFitbitOauth = MutableStateFlow<Result<CompositionObj<FitbitOauth, String>>>(Result.Empty)
     val compositionFitbitOauth :  StateFlow<Result<CompositionObj<FitbitOauth, String>>> = _compositionFitbitOauth
+
+    private val _compositionNotifications = MutableStateFlow<Result<CompositionObj<ArrayList<Notification>,String>>>(Result.Empty)
+    val compositionNotifications :  StateFlow<Result<CompositionObj<ArrayList<Notification>,String>>> = _compositionNotifications
+
+    private val _compositionNotification = MutableStateFlow<Result<CompositionObj<Notification,String>>>(Result.Empty)
+    val compositionNotification :  StateFlow<Result<CompositionObj<Notification,String>>> = _compositionNotification
+
 
 
     private val _loadingProgress = MutableStateFlow(false)
@@ -70,5 +75,18 @@ class UserViewModel  @Inject constructor(
         _loadingProgress.value = false
     }
 
+    fun fetch_notification_by_user(user_id: String) = viewModelScope.launch (Dispatchers.IO) {
+        _compositionNotifications.value = Result.Empty
+        _loadingProgress.value = true
+        _compositionNotifications.value = userRepository.fetc_notificatio_by_user(user_id = user_id)
+        _loadingProgress.value = false
+    }
+
+    fun delete_notification(notification_id: String) = viewModelScope.launch (Dispatchers.IO) {
+        _compositionNotification.value = Result.Empty
+        _loadingProgress.value = true
+        _compositionNotification.value = userRepository.delete_notification(notification_id = notification_id)
+        _loadingProgress.value = false
+    }
 
 }

@@ -15,4 +15,7 @@ class UserRemoteDataSource @Inject constructor(
     suspend fun updateUserImage(requestBody: MutableMap<String, String>) = userService.updateUserImage(requestBody)
     suspend fun updateHealthDataUser(requestBody: MutableMap<String, String>) = userService.updateHealthDataUser(requestBody)
     suspend fun fitbitOAuth(requestBody: MutableMap<String, String>) = userService.fitbitOAuth(requestBody)
+    suspend fun fetchNotificationByUser(requestBody: MutableMap<String, String>) = userService.fetchNotificationByUser(requestBody)
+    suspend fun deleteNotification(requestBody: MutableMap<String, String>) = userService.deleteNotification(requestBody)
+
 }

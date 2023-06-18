@@ -42,6 +42,7 @@
     <string name="save">Guardar</string>
     <string name="add_medicine">Agregar medicina</string>
     <string name="medicines">Mis medicinas</string>
+    <string name="notifications">Notificaciones</string>
 
     <string name="have_friends_request"> <u>Tienes solicitudes de amigos pendientes</u> </string>
     <string name="my_friends">Mis amigos</string>
@@ -62,10 +63,12 @@
     <string name="last_sync">Última sincronización:</string>
     <string name="percentage">%</string>
     <string name="datos_detail">Mis datos</string>
-    <string name="vytal_signal">Signos vitales</string>
     <!-- WEARABLES -->
     <string name="wearables_my_data">Mis datos</string>
     <string name="wearables_my_friends_data">Datos de amigos</string>
+    <string name="title_from">Datos</string>
+    <string name="title_to">de</string>
+    <string name="vytal_signal">Signos vitales</string>
 
     <!-- errors -->
     <string name="error_fill">LLena todos los campos</string>

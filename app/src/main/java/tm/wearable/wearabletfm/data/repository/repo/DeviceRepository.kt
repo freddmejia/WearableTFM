@@ -66,6 +66,7 @@ class DeviceRepository@Inject constructor(
                 requestBody["user_id"] = user_id
                 val response = deviceRemoteDatasource.fetchLastMetricsByUser(requestBody = requestBody)
                 val body = response.body()
+                Log.e("", "fetch_last_metrics_by_user: "+body.toString() )
                 if (body != null) {
                     val ab = CompositionObj(response.body()!!.metrics, response.body()!!.message)
                     Result.Success(ab)

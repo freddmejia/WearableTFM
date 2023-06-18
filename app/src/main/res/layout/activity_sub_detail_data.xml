@@ -55,11 +55,20 @@
                     android:focusable="true"
                     android:clickable="true"/>
             </LinearLayout>
+            <TextView
+                android:id="@+id/tvMeasure"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/accept"
+                android:layout_marginHorizontal="15sp"
+                style="@style/bold_medium"
+                />
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvData"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"/>
+                android:layout_marginTop="20sp"
+                android:layout_marginHorizontal="15sp"/>
             <RelativeLayout
                 android:id="@+id/noData"
                 android:layout_width="match_parent"

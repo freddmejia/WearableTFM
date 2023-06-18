@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName
 import retrofit2.http.Body
 import retrofit2.http.POST
 import tm.wearable.wearabletfm.data.model.Health
+import tm.wearable.wearabletfm.data.model.Notification
 import tm.wearable.wearabletfm.data.model.User
 import tm.wearable.wearabletfm.data.model.shortUser
 import tm.wearable.wearabletfm.utils.Utils
@@ -32,6 +33,11 @@ interface UserServiceRemote {
 
     @POST(Utils.fitbit_oauth)
     suspend fun fitbitOAuth (@Body requestBody: Map<String,String>): retrofit2.Response<FitbitResponseApi>
+
+    @POST(Utils.fetch_notifi_by_user)
+    suspend fun fetchNotificationByUser (@Body requestBody: Map<String,String>): retrofit2.Response<NotificationResponseApi>
+    @POST(Utils.delete_notification)
+    suspend fun deleteNotification (@Body requestBody: Map<String,String>): retrofit2.Response<NotificationDResponseApi>
 }
 
 class UserResponseApi {
@@ -51,4 +57,14 @@ class FitbitResponseApi {
     @SerializedName("codeVerifier") var codeVerifier: String = ""
     @SerializedName("codeChallenge") var codeChallenge: String = ""
     @SerializedName("url") var url: String = ""
+}
+
+class NotificationResponseApi {
+    @SerializedName("notifications") var notifications: ArrayList<Notification> = arrayListOf()
+    @SerializedName("message") var message: String = ""
+}
+
+class NotificationDResponseApi {
+    @SerializedName("notification") var notification: Notification = Notification()
+    @SerializedName("message") var message: String = ""
 }
