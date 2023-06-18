@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.datatransport.cct.internal.LogEvent
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,8 +55,6 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
     private var firstDate = GregorianCalendar()
     private var lastDate = GregorianCalendar()
     private var actualDate = GregorianCalendar()
-    private lateinit var toast: Toast
-    private var idDevice = 0
     private val calendarViewModel: CalendarViewModel by viewModels()
     private var dateSelected = GregorianCalendar()
     private lateinit var user : User
@@ -78,12 +77,15 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
         binding.rvCalendar.layoutManager = GridLayoutManager(this, 1, GridLayoutManager.HORIZONTAL, false)
         binding.rvCalendar.adapter = adapterCalendar
 
+        dateSelected = GregorianCalendar()
+        actualDate = GregorianCalendar()
+        offset = 0
+        currentPage = 0
         listMetrics = arrayListOf()
         metrics = Metrics()
         metricsDetailAdapter = MetricsDetailAdapter(context = this, list = listMetrics)
         metricsDetailAdapter.setHasStableIds(true)
         binding.rvData.adapter = metricsDetailAdapter
-        listMetrics = arrayListOf()
         setRVLayoutManager()
         setRVScrollListener()
 
@@ -97,7 +99,6 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
 
         events()
         coroutines()
-        callApi()
     }
 
     private fun setRVLayoutManager() {
@@ -127,7 +128,8 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
                 date = Utils.parseShortDate(date = actualDate.time),
                 limit = Utils.paginationLimit.toString(),
                 offset = offset.toString(),
-                type = metrics.type
+                type = metrics.type,
+                loadProgress = false
             )
         }
     }
@@ -163,63 +165,35 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
 
         lifecycleScope.launchWhenCreated {
             repeatOnLifecycle(Lifecycle.State.STARTED){
-                deviceViewModel.compositionMetrics2.collect{ result->
+                deviceViewModel.compositionMetrics.collect{ result->
                     when(result){
                         is Result.Success<CompositionObj<ArrayList<Metrics>, String>> ->{
-                            result.data.data.forEach {
-                                Log.e("", "coroutines: "+it.toString() +"\n"+
-                                        it.type
-                                )
-                            }
-                            binding?.rvData?.isVisible = true
-                            binding?.noData?.isVisible = false
+                            showData()
                             metricsDetailAdapter.addData(newList = result.data.data as ArrayList<Metrics?>)
                             hasData = true
                             scrollListener.setLoaded()
                             binding.rvData.post {
                                 metricsDetailAdapter.notifyDataSetChanged()
                             }
+
                         }
-                        else->{
-                            metricsDetailAdapter.removeNull()
-                            scrollListener.setLoaded()
-                            binding?.rvData?.isVisible = false
-                            binding?.noData?.isVisible = true
-                            hasData = false
+                        is Result.Error ->{
+                            Log.e("", "coroutines: isData "+metricsDetailAdapter.isData() )
+                            if (metricsDetailAdapter.isData() ){
+                                showData()
+                            }else {
+                                metricsDetailAdapter.removeNull()
+                                scrollListener.setLoaded()
+                                binding?.rvData?.isVisible = false
+                                binding?.noData?.isVisible = true
+                                hasData = false
+                            }
                         }
+                        else-> Unit
                     }
                 }
             }
         }
-
-    /*     lifecycleScope.launchWhenCreated {
-            repeatOnLifecycle(Lifecycle.State.STARTED){
-                deviceViewModel.compositionMetrics.collect{ result->
-                    when(result){
-                        is Result.Success<CompositionObj<ArrayList<Metrics>, String>> ->{
-                            hasData = true
-
-                            binding.rvDevicesData.post {
-                                adapter.notifyItemRemoved(listDevSpec.size)
-                            }
-                            //listDevSpec.addAll(result.data)
-                            adapter.addData( result.data as ArrayList<DataMetrics?>)
-                            scrollListener.setLoaded()
-                            binding.rvDevicesData.post {
-                                adapter.notifyDataSetChanged()
-                            }
-
-                        }
-                        else-> {
-                            adapter.removeNull()
-                            scrollListener.setLoaded()
-                            hasData = false
-                        }
-                    }
-                }
-            }
-        }*/
-
 
         lifecycleScope.launchWhenCreated {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
@@ -264,12 +238,6 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
             }
         }
     }
-
-    fun callApi(){
-        Log.e("", "callApi: "+user.id.toString() )
-        deviceViewModel.fetch_last_metrics_by_user(user_id = user.id.toString())
-    }
-
 
     fun setUpToolBar(){
         toolbarAppBinding = MainToolbarBinding.bind(binding.root)
@@ -339,6 +307,12 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
                 Log.e("", "getExtraDeviceData: "+e.message )
             }
         }
+    }
+
+    fun showData() {
+        binding?.rvData?.isVisible = true
+        binding?.noData?.isVisible = false
+
     }
 
 }

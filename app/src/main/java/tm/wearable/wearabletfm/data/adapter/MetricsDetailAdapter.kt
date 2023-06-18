@@ -76,6 +76,8 @@ class MetricsDetailAdapter (val context: Context, var list: ArrayList<Metrics?>)
         notifyDataSetChanged()
     }
 
+    fun isData() = this.list.size > 0
+
     fun getItemAtPosition(position: Int): Metrics? {
         return list[position]
     }

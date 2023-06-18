@@ -57,10 +57,11 @@ class DeviceViewModel @Inject constructor(
         _loadingProgress.value = false
     }
 
-    fun fetch_last_metrics_by_user_type_date(user_id: String, date: String, type: String, limit: String, offset: String) = viewModelScope.launch {
-        _compositionMetrics2.value = Result.Empty
-        _loadingProgress.value = true
-        _compositionMetrics2.value = deviceRepository.fetch_last_metrics_by_user_type_date(user_id = user_id, date = date, type = type, limit = limit, offset = offset)
+    fun fetch_last_metrics_by_user_type_date(user_id: String, date: String, type: String, limit: String, offset: String, loadProgress: Boolean = true) = viewModelScope.launch {
+        _compositionMetrics.value = Result.Empty
+        if (loadProgress)
+            _loadingProgress.value = true
+        _compositionMetrics.value = deviceRepository.fetch_last_metrics_by_user_type_date(user_id = user_id, date = date, type = type, limit = limit, offset = offset)
         _loadingProgress.value = false
     }
 }

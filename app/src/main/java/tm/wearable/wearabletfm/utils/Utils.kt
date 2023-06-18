@@ -70,7 +70,7 @@ class Utils {
         const val saturday = 5
         const val sunday = 6
 
-        const val paginationLimit = 4
+        const val paginationLimit = 20
 
         var medicinesDays: HashMap<String, Int> = HashMap()
 
