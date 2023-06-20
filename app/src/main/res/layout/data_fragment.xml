@@ -110,6 +110,19 @@
                         android:layout_marginTop="20sp"
 
                         />
+                    <androidx.recyclerview.widget.RecyclerView
+                        android:id="@+id/rvUsersMetrics"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        />
+                    <TextView
+                        android:id="@+id/tvNoDataUsersMetrics"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/error_no_have_friends"
+                        style="@style/normal_medium"
+                        android:layout_marginHorizontal="15sp"/>
+
                 </LinearLayout>
             </RelativeLayout>
 

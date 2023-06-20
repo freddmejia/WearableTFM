@@ -18,20 +18,20 @@ import tm.wearable.wearabletfm.databinding.MetricsGenItemBinding
 import tm.wearable.wearabletfm.utils.TypeMetrics
 import tm.wearable.wearabletfm.utils.Utils
 
-class MetricsGeneralAdapter (val context: Context, var list: List<Metrics>, val observer: UIMetric):
+class MetricsGeneralAdapter (val context: Context, var list: List<Metrics>, val observer: UIMetric? = null):
     RecyclerView.Adapter<MetricsGeneralAdapter.holderAdapter>() {
 
     class holderAdapter(binding: MetricsGenItemBinding): RecyclerView.ViewHolder(binding.root){
         private val binding = binding
 
-        fun binData(metrics: Metrics, context: Context, observer: UIMetric){
+        fun binData(metrics: Metrics, context: Context, observer: UIMetric?=null){
             Log.e("", "binData: "+metrics.type )
             binding.valueMetric.text = metrics.value +" \n"+metrics.measure
             binding.imageType.setImageResource(TypeMetrics.getIconSensor(type = metrics.type))
             val color = ContextCompat.getColor(context, TypeMetrics.getColorDetailDataMetrics(type = metrics.type))
             binding.cvMetricColor.setStrokeColor(color)
             binding.cvMetricColor.setOnClickListener {
-                observer.onClick(metrics = metrics)
+                observer?.onClick(metrics = metrics)
             }
         }
 

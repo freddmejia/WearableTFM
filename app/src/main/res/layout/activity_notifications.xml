@@ -19,7 +19,8 @@
                 android:id="@+id/rvNotifications"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20sp"/>
+                android:layout_marginTop="20sp"
+                android:layout_marginHorizontal="10sp"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
     <ProgressBar

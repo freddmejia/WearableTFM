@@ -6,6 +6,7 @@ import kotlinx.coroutines.withContext
 import tm.wearable.wearabletfm.data.model.Device
 import tm.wearable.wearabletfm.data.model.Friend
 import tm.wearable.wearabletfm.data.model.Metrics
+import tm.wearable.wearabletfm.data.model.User
 import tm.wearable.wearabletfm.data.repository.datasource.remote.DeviceRemoteDatasource
 import tm.wearable.wearabletfm.data.repository.datasource.remote.FriendRemoteDataSource
 import tm.wearable.wearabletfm.utils.CompositionObj
@@ -89,17 +90,48 @@ class DeviceRepository@Inject constructor(
                 requestBody["date"] = date
                 requestBody["limit"] = limit
                 requestBody["offset"] = offset
-                Log.e("", "coroutines fetch_last_metrics_by_user_type_date: "+requestBody.toString() )
                 val response = deviceRemoteDatasource.fetchLastMetricsByUserTypeDate(requestBody = requestBody)
                 val body = response.body()
 
                 if (body != null) {
                     val me = response.body()!!.metrics
                     me.forEach {
-                        Log.e("", "coroutines fetch_last_metrics_by_user_type_date:dd "+it.type +"\n")
+                        it.details.forEach {
+                            Log.e("", "fetch_last_metrics_by_user_type_date: "+it.toString() )
+                        }
                     }
                     val ab = CompositionObj(me, response.body()!!.message)
                     Result.Success(ab)
+                }
+                else{
+                    Utils.errorResult( message = "",errorBody = response.errorBody()!!)
+                }
+            }catch (e: Exception){
+                Utils.errorResult(message = e.message ?: e.toString())
+            }
+        }
+    }
+
+    suspend fun fetch_metrics_friends_by_user(user_id: String): Result<ArrayList<CompositionObj<User, ArrayList<Metrics>>>> {
+        return withContext(Dispatchers.Default){
+            try {
+                val requestBody: MutableMap<String, String> = HashMap()
+                requestBody["user_id"] = user_id
+                val response = deviceRemoteDatasource.fetchMetricsFriendsByUser(requestBody = requestBody)
+                val body = response.body()
+
+                if (body != null) {
+                    var dataSuccess = ArrayList<CompositionObj<User, ArrayList<Metrics>>>()
+                    response.body()!!.metrics_friends.forEach {
+                        Log.e("", "fetch_metrics_friends_by_user: "+it.toString() )
+                        dataSuccess.add(
+                            CompositionObj(
+                                it.user,
+                                it.metrics
+                            )
+                        )
+                    }
+                    Result.Success(dataSuccess)
                 }
                 else{
                     Utils.errorResult( message = "",errorBody = response.errorBody()!!)

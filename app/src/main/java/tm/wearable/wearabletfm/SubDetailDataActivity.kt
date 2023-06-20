@@ -2,6 +2,7 @@ package tm.wearable.wearabletfm
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -54,7 +55,6 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
     private var actualDate = GregorianCalendar()
     private val calendarViewModel: CalendarViewModel by viewModels()
     private var dateSelected = GregorianCalendar()
-    private lateinit var user : User
     private lateinit var metrics: Metrics
 
 
@@ -63,12 +63,21 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
     lateinit var scrollListener: RecyclerViewLoadMoreScroll
     private var currentPage = 0
     private var hasData = false
+    private lateinit var user : User
+    private lateinit var userLogged : User
+    private lateinit var prefsUser: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivitySubDetailDataBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpToolBar()
+
+        prefsUser = getSharedPreferences(
+            resources.getString(R.string.shared_preferences),
+            Context.MODE_PRIVATE
+        )!!
+        userLogged = User(JSONObject(prefsUser!!.getString("user","")))
 
         adapterCalendar = CalendarAdapter(context = this, listDays = daysCalendar, observer = this)
         binding.rvCalendar.layoutManager = GridLayoutManager(this, 1, GridLayoutManager.HORIZONTAL, false)
@@ -86,11 +95,11 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
         setRVLayoutManager()
         setRVScrollListener()
 
-        val prefsUser = getSharedPreferences(
+        /*val prefsUser = getSharedPreferences(
             resources.getString(R.string.shared_preferences),
             Context.MODE_PRIVATE
         )
-        user = User(JSONObject(prefsUser!!.getString("user","")))
+        user = User(JSONObject(prefsUser!!.getString("user","")))*/
 
         intent?.extras?.let { getExtraDeviceData(it) }
 
@@ -298,6 +307,9 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
 
                 val metricsType: Type = object : TypeToken<Metrics>() {}.type
                 metrics = Gson().fromJson(bundle.getString("metrics"),metricsType)
+                val userType: Type = object : TypeToken<User>() {}.type
+                user = Gson().fromJson(bundle.getString("user"),userType)
+                toolbarAppBinding.titleBar.text = if (user.id != userLogged.id) user.name else toolbarAppBinding.titleBar.text
 
                 binding.tvMeasure.text = resources.getString(R.string.title_from) + " "+ resources.getString(R.string.title_to)+ " "+TypeMetrics.getNameSensor(metrics.type)
                 actualDate = dateSelected

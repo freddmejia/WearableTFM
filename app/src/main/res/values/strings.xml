@@ -69,6 +69,8 @@
     <string name="title_from">Datos</string>
     <string name="title_to">de</string>
     <string name="vytal_signal">Signos vitales</string>
+    <string name="title_bed_time">Dormirse</string>
+    <string name="title_wake_time">Despertarse</string>
 
     <!-- errors -->
     <string name="error_fill">LLena todos los campos</string>
@@ -77,6 +79,6 @@
     <string name="error_not_day_medicine">Debes escoger un dia de la toma de tu medicina</string>
     <string name="error_no_data">No hay datos</string>
     <string name="error_data">Hay datos</string>
-
+    <string name="error_no_have_friends">No tienes amigos, agrega amigos para ver datos</string>
 
 </resources>

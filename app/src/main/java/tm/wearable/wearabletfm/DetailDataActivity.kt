@@ -2,6 +2,7 @@ package tm.wearable.wearabletfm
 
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -25,6 +26,7 @@ import tm.wearable.wearabletfm.data.adapter.MetricsGeneralDetailAdapter
 import tm.wearable.wearabletfm.data.interfaces.UICDay
 import tm.wearable.wearabletfm.data.interfaces.UIMetric
 import tm.wearable.wearabletfm.data.model.CDay
+import tm.wearable.wearabletfm.data.model.Medicine
 import tm.wearable.wearabletfm.data.model.Metrics
 import tm.wearable.wearabletfm.data.model.User
 import tm.wearable.wearabletfm.data.viewmodel.CalendarViewModel
@@ -54,13 +56,21 @@ class DetailDataActivity : AppCompatActivity(), UICDay, UIMetric {
     private val calendarViewModel: CalendarViewModel by viewModels()
     private var dateSelected = GregorianCalendar()
     private lateinit var user : User
-
+    private lateinit var userLogged : User
+    private lateinit var prefsUser: SharedPreferences
+    //private  var user_id = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityDetailDataBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setUpToolBar()
+
+        prefsUser = getSharedPreferences(
+            resources.getString(R.string.shared_preferences),
+            Context.MODE_PRIVATE
+        )!!
+        userLogged = User(JSONObject(prefsUser!!.getString("user","")))
 
         adapterCalendar = CalendarAdapter(context = this, listDays = daysCalendar, observer = this)
         binding.rvCalendar.layoutManager = GridLayoutManager(this, 1, GridLayoutManager.HORIZONTAL, false)
@@ -73,11 +83,6 @@ class DetailDataActivity : AppCompatActivity(), UICDay, UIMetric {
         binding.rvData.adapter = metricsGeneralDetailAdapter
 
 
-        val prefsUser = getSharedPreferences(
-            resources.getString(R.string.shared_preferences),
-            Context.MODE_PRIVATE
-        )
-        user = User(JSONObject(prefsUser!!.getString("user","")))
 
         intent?.extras?.let { getExtraDeviceData(it) }
 
@@ -180,7 +185,6 @@ class DetailDataActivity : AppCompatActivity(), UICDay, UIMetric {
     }
 
     fun callApi(){
-        Log.e("", "callApi: "+user.id.toString() )
         deviceViewModel.fetch_last_metrics_by_user(user_id = user.id.toString())
     }
 
@@ -228,6 +232,7 @@ class DetailDataActivity : AppCompatActivity(), UICDay, UIMetric {
 
             val dateSelected = daysCalendar.filter { it.isSelected }.single()
             val intent = Intent(this, SubDetailDataActivity::class.java)
+            intent.putExtra("user", Gson().toJson(user))
             intent.putExtra("metrics", Gson().toJson(metrics))
             intent.putExtra("date_start", SimpleDateFormat("dd-MM-yyyy HH:mm:ss").format(daysCalendar.get(0).date.time))
             intent.putExtra(
@@ -248,7 +253,9 @@ class DetailDataActivity : AppCompatActivity(), UICDay, UIMetric {
 
                 var date_start = GregorianCalendar()
                 date_start.time = formatter.parse(bundle.getString("date_start").toString())
-
+                val userType: Type = object : TypeToken<User>() {}.type
+                user = Gson().fromJson(bundle.getString("user"),userType)
+                toolbarAppBinding.titleBar.text = if (user.id != userLogged.id) user.name else toolbarAppBinding.titleBar.text
                 actualDate = dateSelected
                 calendarViewModel.getActualWeek(dateSelected = date_start, isPrevious = false, dateToSelect = actualDate)
             }catch (e: java.lang.Exception){

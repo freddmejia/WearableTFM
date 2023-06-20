@@ -13,6 +13,11 @@ object TypeMetrics {
     const val kals_name = "KCALS"
     const val sleep_name = "SLEEP"
 
+    const val sleep_deep = "SLEEP_DEEP"
+    const val sleep_light = "SLEEP_light"
+    const val sleep_rem = "SLEEP_REM"
+    const val sleep_wake = "SLEEP_WAKE"
+    const val sleep_total_bed = "SLEEP_TOTAL_BED"
 
 
 
@@ -23,6 +28,12 @@ object TypeMetrics {
         attributes.put(distance_name, "Distance")
         attributes.put(kals_name, "Kcals")
         attributes.put(sleep_name, "Sleep")
+
+        attributes.put(sleep_deep, "Sueño profundo")
+        attributes.put(sleep_light, "Sueño ligero")
+        attributes.put(sleep_rem, "Sueño rem")
+        attributes.put(sleep_wake, "Despierto")
+        attributes.put(sleep_total_bed, "Tiempo en cama")
 
 
         attrImg.put(heart_rate_name, R.drawable.heart_rate_icon)

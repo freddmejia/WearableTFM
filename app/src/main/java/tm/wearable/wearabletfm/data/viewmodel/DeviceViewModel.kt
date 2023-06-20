@@ -7,10 +7,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import tm.wearable.wearabletfm.data.model.Device
-import tm.wearable.wearabletfm.data.model.Metrics
-import tm.wearable.wearabletfm.data.model.User
-import tm.wearable.wearabletfm.data.model.shortUser
+import tm.wearable.wearabletfm.data.model.*
 import tm.wearable.wearabletfm.data.repository.repo.DeviceRepository
 import tm.wearable.wearabletfm.data.repository.repo.UserRepository
 import tm.wearable.wearabletfm.utils.CompositionObj
@@ -28,13 +25,15 @@ class DeviceViewModel @Inject constructor(
     val compositionMetrics :  StateFlow<Result<CompositionObj<ArrayList<Metrics>, String>>> = _compositionMetrics
 
 
-    private val _compositionMetrics2 = MutableStateFlow<Result<CompositionObj<ArrayList<Metrics>, String>>>(Result.Empty)
-    val compositionMetrics2 :  StateFlow<Result<CompositionObj<ArrayList<Metrics>, String>>> = _compositionMetrics
+    private val _compositionUserFriendsMetrics = MutableStateFlow<Result<ArrayList<CompositionObj<User, ArrayList<Metrics>>>>>(Result.Empty)
+    val compositionUserFriendsMetrics :  StateFlow<Result<ArrayList<CompositionObj<User, ArrayList<Metrics>>>>> = _compositionUserFriendsMetrics
 
 
     private val _loadingProgress = MutableStateFlow(false)
     val loadingProgress: StateFlow<Boolean> = _loadingProgress
 
+    private val _loadingProgressSpe = MutableStateFlow(false)
+    val loadingProgressSpe: StateFlow<Boolean> = _loadingProgressSpe
 
     fun fetch_devices(user_id: String) = viewModelScope.launch {
         _compositionDevices.value = Result.Empty
@@ -63,5 +62,12 @@ class DeviceViewModel @Inject constructor(
             _loadingProgress.value = true
         _compositionMetrics.value = deviceRepository.fetch_last_metrics_by_user_type_date(user_id = user_id, date = date, type = type, limit = limit, offset = offset)
         _loadingProgress.value = false
+    }
+
+    fun fetch_last_metrics_by_user_type_date(user_id: String) = viewModelScope.launch {
+        _compositionUserFriendsMetrics.value = Result.Empty
+        _loadingProgressSpe.value = true
+        _compositionUserFriendsMetrics.value = deviceRepository.fetch_metrics_friends_by_user(user_id = user_id)
+        _loadingProgressSpe.value = false
     }
 }

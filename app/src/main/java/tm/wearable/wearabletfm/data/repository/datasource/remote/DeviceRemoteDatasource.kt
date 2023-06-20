@@ -10,5 +10,6 @@ class DeviceRemoteDatasource  @Inject constructor(
     suspend fun fetchMetricsByUserDate(requestBody: MutableMap<String, String>) = wearableServiceRemote.fetch_metrics_by_user_date(requestBody)
     suspend fun fetchLastMetricsByUser(requestBody: MutableMap<String, String>) = wearableServiceRemote.fetch_last_metrics_by_user(requestBody)
     suspend fun fetchLastMetricsByUserTypeDate(requestBody: MutableMap<String, String>) = wearableServiceRemote.fetch_metrics_by_user_type_date(requestBody)
+    suspend fun fetchMetricsFriendsByUser(requestBody: MutableMap<String, String>) = wearableServiceRemote.fetch_metrics_friends_by_user(requestBody)
 
 }

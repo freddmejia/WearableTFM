@@ -11,6 +11,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
 import tm.wearable.wearabletfm.data.adapter.NotificationAdapter
 import tm.wearable.wearabletfm.data.interfaces.UIObserverGeneric
@@ -20,6 +21,7 @@ import tm.wearable.wearabletfm.data.viewmodel.UserViewModel
 import tm.wearable.wearabletfm.databinding.ActivityNotificationsBinding
 import tm.wearable.wearabletfm.databinding.MainToolbarBinding
 import tm.wearable.wearabletfm.utils.*
+@AndroidEntryPoint
 class NotificationsActivity : AppCompatActivity(), UIObserverGeneric<Notification> {
     private lateinit var notificationAdapter: NotificationAdapter
     private lateinit var binding: ActivityNotificationsBinding

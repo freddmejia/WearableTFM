@@ -36,6 +36,7 @@ interface UserServiceRemote {
 
     @POST(Utils.fetch_notifi_by_user)
     suspend fun fetchNotificationByUser (@Body requestBody: Map<String,String>): retrofit2.Response<NotificationResponseApi>
+
     @POST(Utils.delete_notification)
     suspend fun deleteNotification (@Body requestBody: Map<String,String>): retrofit2.Response<NotificationDResponseApi>
 }

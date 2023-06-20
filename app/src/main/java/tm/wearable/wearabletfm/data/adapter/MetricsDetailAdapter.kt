@@ -5,6 +5,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.core.view.isVisible
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import tm.wearable.wearabletfm.R
 import tm.wearable.wearabletfm.data.model.Metrics
@@ -27,6 +28,12 @@ class MetricsDetailAdapter (val context: Context, var list: ArrayList<Metrics?>)
             try {
 
                 if (metrics.type == TypeMetrics.sleep_name){
+                    binding.linear1.isVisible = true
+                    val adapter = MetricsSleepAdapter(context = context, list = metrics.details.sortedBy { it.type }.reversed())
+                    binding.rvDetailsDataMetrics.layoutManager =  GridLayoutManager(context, 2)
+                    binding.rvDetailsDataMetrics.adapter = adapter
+                    binding.tvBedTime.text = metrics.datetime.split(" ")[1]
+                    binding.tvWakeTime.text = metrics.enddatetime.split(" ")[1]
                     /*binding.linear1.isVisible = true
                     binding.totalSleep.text = context.resources.getString(R.string.from)+" "+ deviceData.created_at.split(" ")[1] +" "+
                             context.resources.getString(R.string.to)+" "+

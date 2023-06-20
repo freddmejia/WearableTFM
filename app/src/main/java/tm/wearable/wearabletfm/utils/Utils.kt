@@ -55,6 +55,7 @@ class Utils {
         const val fetch_metrics_by_user_date = "$api_version/fetch_metrics_by_user_date"
         const val fetch_last_metrics_by_user = "$api_version/fetch_last_metrics_by_user"
         const val fetch_metrics_by_user_type_date = "$api_version/fetch_metrics_by_user_type_date"
+        const val fetch_metrics_friends_by_user = "$api_version/fetch_metrics_friends_by_user"
 
 
         const val batteryLevelMin = 30
