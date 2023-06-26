@@ -4,6 +4,7 @@ class DetailMetrics(
     var type: String,
     var value: String,
     var measure: String,
-    var datetime: String) {
+    var datetime: String
+) {
     constructor(): this("","","","")
 }

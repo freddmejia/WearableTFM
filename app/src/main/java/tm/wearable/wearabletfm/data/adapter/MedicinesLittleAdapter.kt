@@ -58,4 +58,6 @@ class MedicinesLittleAdapter(val context: Context, var list: List<Medicine>):
         list = arrayList
         notifyDataSetChanged()
     }
+
+
 }
