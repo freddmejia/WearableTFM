@@ -50,67 +50,7 @@ class MainAppActivity : AppCompatActivity() {
         coroutines()
         chooseSelectionMenu(fragment = HomeFragment.newInstance())
 
-        val cadenaS = "abaaba"
-        //ab
-        //aba
-        //a
-        var subC = arrayListOf<ModelCa>()
-        var index = 0
-        var counterIndex = 0
-        val S = "abaaba"
-        val subOcurr = mutableMapOf<String, Int>()
-        for (i in S.indices) {
-            for (j in i + 1..S.length) {
-                val substring = S.substring(i, j)
-                if (subOcurr.containsKey(substring)) {
-                    subOcurr[substring] = subOcurr[substring]!! + 1
-                } else {
-                    subOcurr[substring] = 1
-                }
-            }
-        }
-
-        var minShort = Int.MAX_VALUE
-        var sub = ""
-        for ((substring, count) in subOcurr) {
-            if (count == 1 && substring.length < minShort) {
-                minShort = substring.length
-                sub = substring
-            }
-        }
-
-        Log.e("", "onCreate111: "+minShort + " "+sub  )
-
-        subC.sortedBy { it.times }.reversed().forEach {
-            Log.e("", "onCreate111: "+it.subca + " "+it.times  )
-        }
     }
-
-
-    fun addOrUpdate(sub: String, subC : ArrayList<ModelCa>): ArrayList<ModelCa> {
-        var subcNew = subC
-        if (subcNew.isEmpty()){
-            subcNew.add(
-                ModelCa(subca = sub, times = 1)
-            )
-        }else{
-            var add = false
-            subcNew.forEach {
-                if (it.subca.contains(sub) ){
-                    it.times = it.times + 1
-                }else{
-                    add = true
-                }
-            }
-            if (add)
-                subcNew.add(ModelCa(subca = sub, times = 1))
-        }
-        return subcNew
-    }
-    class ModelCa(var subca: String, var times: Int){
-        constructor(): this("",0)
-    }
-
     fun events() {
 
         bottomBarBinding.rvHome.setOnClickListener {

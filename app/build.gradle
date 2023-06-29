@@ -5,7 +5,7 @@ plugins {
     id 'kotlin-kapt'
     id 'com.google.dagger.hilt.android'
  //   id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
-
+    id "org.sonarqube" version "4.2.1.3168"
 }
 
 android {
@@ -90,4 +90,5 @@ dependencies {
 
     //icon battery
     implementation "io.github.iamthevoid.batteryview:batteryview:0.6.1"
+
 }

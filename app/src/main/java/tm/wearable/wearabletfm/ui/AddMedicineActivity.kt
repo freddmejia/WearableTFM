@@ -78,7 +78,6 @@ class AddMedicineActivity : AppCompatActivity() , UIMedicine{
         coroutines()
     }
 
-
     fun setUpToolBar() {
         toolbarAppBinding = MainToolbarBinding.bind(binding.root)
         setSupportActionBar(toolbarAppBinding.toolbar)
@@ -87,6 +86,7 @@ class AddMedicineActivity : AppCompatActivity() , UIMedicine{
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
     }
+
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             android.R.id.home->
