@@ -17,5 +17,7 @@ class UserRemoteDataSource @Inject constructor(
     suspend fun fitbitOAuth(requestBody: MutableMap<String, String>) = userService.fitbitOAuth(requestBody)
     suspend fun fetchNotificationByUser(requestBody: MutableMap<String, String>) = userService.fetchNotificationByUser(requestBody)
     suspend fun deleteNotification(requestBody: MutableMap<String, String>) = userService.deleteNotification(requestBody)
+    suspend fun forgot_password_step_one(requestBody: MutableMap<String, String>) = userService.forgot_password_step_one(requestBody)
+    suspend fun update_password_step_last(requestBody: MutableMap<String, String>) = userService.update_password_step_last(requestBody)
 
 }

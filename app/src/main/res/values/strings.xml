@@ -8,7 +8,10 @@
     <string name="new_user">Soy nuevo</string>
     <string name="login_email">Escribe correo electronico</string>
     <string name="login_password">Escribe contraseña</string>
+    <string name="re_login_password">Rescribe contraseña</string>
     <string name="btn_access">Ingresar</string>
+    <string name="btn_send">Enviar</string>
+    <string name="btn_save">Guardar</string>
     <string name="forget_password">Olvidaste la contraseña?</string>
     <string name="new_user_title">Registrarse</string>
     <string name="new_user_names">Escribe nombres y apellidos</string>
@@ -53,6 +56,9 @@
     <string name="title_add_friend">Agrega un amigo</string>
     <string name="my_wearables">Mis wearables</string>
     <string name="add_wearable">Agrega un wearable</string>
+    <string name="change_password">Cambio de contraseña</string>
+    <string name="recover_account">Recuperar cuenta</string>
+    <string name="write_code">Escribe el código de tu e-mail</string>
 
     <!-- FITBIT resources -->
     <string name="fitbit_client_id">23QYFW</string>

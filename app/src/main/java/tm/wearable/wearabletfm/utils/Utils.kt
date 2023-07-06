@@ -11,7 +11,7 @@ import java.util.*
 class Utils {
     companion object {
         const val api_version = "/api"
-        const val domainApi = "http://192.168.1.16:8000/"
+        const val domainApi = "http://192.168.1.28:8000/"
         //const val domainApi = "http://52.54.33.62/"
         const val domainApiFitbit = "https://www.fitbit.com/"
         const val oauthFitbit = "/oauth2"
@@ -56,6 +56,10 @@ class Utils {
         const val fetch_last_metrics_by_user = "$api_version/fetch_last_metrics_by_user"
         const val fetch_metrics_by_user_type_date = "$api_version/fetch_metrics_by_user_type_date"
         const val fetch_metrics_friends_by_user = "$api_version/fetch_metrics_friends_by_user"
+
+        //forgot password
+        const val forgot_password_step_one = "$api_version/forgot_password_step_one"
+        const val update_password_step_last = "$api_version/update_password_step_last"
 
 
         const val batteryLevelMin = 30

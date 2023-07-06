@@ -55,8 +55,11 @@ class HomeFragment: Fragment(R.layout.home_fragment), UIUserProfile, UIUserHealt
             getString(R.string.shared_preferences), Context.MODE_PRIVATE)
         toast = Toast(this@HomeFragment.requireContext())
         try {
+            Log.e("", "onViewCreated: "+sharedPref!!.getString("health","") )
             user = User(JSONObject(sharedPref!!.getString("user","")))
+            health = Health()
             health = Health(jsonObject = JSONObject(sharedPref!!.getString("health","")))
+
         }catch (e: java.lang.Exception){
 
         }

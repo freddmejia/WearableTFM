@@ -39,6 +39,13 @@ interface UserServiceRemote {
 
     @POST(Utils.delete_notification)
     suspend fun deleteNotification (@Body requestBody: Map<String,String>): retrofit2.Response<NotificationDResponseApi>
+
+    @POST(Utils.forgot_password_step_one)
+    suspend fun forgot_password_step_one(@Body requestBody: Map<String,String>): retrofit2.Response<ForgotPasswordDResponseApi>
+
+    @POST(Utils.update_password_step_last)
+    suspend fun update_password_step_last(@Body requestBody: Map<String,String>): retrofit2.Response<UserResponseApi>
+
 }
 
 class UserResponseApi {
@@ -68,4 +75,18 @@ class NotificationResponseApi {
 class NotificationDResponseApi {
     @SerializedName("notification") var notification: Notification = Notification()
     @SerializedName("message") var message: String = ""
+}
+
+class ForgotPasswordDResponseApi {
+    @SerializedName("user") var user: forgotPass = forgotPass()
+    @SerializedName("message") var message: String = ""
+}
+
+class forgotPass(
+    var id: Int,
+    var name: String,
+    var email: String,
+    var code: String,
+) {
+    constructor(): this(0,"","","")
 }

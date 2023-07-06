@@ -4,12 +4,14 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
+import tm.wearable.wearabletfm.ForgotPasswordActivity
 import tm.wearable.wearabletfm.MainAppActivity
 import tm.wearable.wearabletfm.data.viewmodel.UserViewModel
 import tm.wearable.wearabletfm.databinding.ActivityLoginBinding
@@ -76,6 +78,10 @@ class LoginActivity : AppCompatActivity() {
                 )
             }
         }
+
+        loginBinding.tvForgetPassword.setOnClickListener {
+            startActivity(Intent(this,ForgotPasswordActivity::class.java))
+        }
     }
 
     fun coroutines() {
@@ -101,19 +107,20 @@ class LoginActivity : AppCompatActivity() {
                             this?.putString("user",json.toString())
                             this?.putString("token",result.data.data.token)
                             this?.putBoolean("islogged",true)
-                            json = JSONObject()
-                            json.put("id",result.data.data.health?.id.toString())
-                            json.put("height",result.data.data.health?.height.toString())
-                            json.put("weight",result.data.data.health?.weight.toString())
-                            json.put("birthay",result.data.data.health?.birthay.toString())
-                            json.put("yearOld",result.data.data.health?.yearOld.toString())
-                            this?.putString("health",json.toString())
+
+                            var jsonH = JSONObject()
+                            jsonH.put("id",result.data.data.health?.id.toString())
+                            jsonH.put("height",result.data.data.health?.height.toString())
+                            jsonH.put("weight",result.data.data.health?.weight.toString())
+                            jsonH.put("birthay",result.data.data.health?.birthay.toString())
+                            jsonH.put("yearOld",result.data.data.health?.yearOld.toString())
+                            Log.e("", "coroutines: health "+ jsonH.toString())
+                            this?.putString("health",jsonH.toString())
                             this?.apply()
                         }
-                        finish()
-                        startActivity(
-                            Intent(this@LoginActivity, MainAppActivity::class.java)
-                        )
+                        val intent = Intent(this@LoginActivity, MainAppActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
                     }
                     is  Result.Error -> {
                         showToast(message =  result.error)

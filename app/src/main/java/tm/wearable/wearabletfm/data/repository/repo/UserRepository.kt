@@ -1,9 +1,11 @@
 package tm.wearable.wearabletfm.data.repository.repo
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import tm.wearable.wearabletfm.data.model.*
 import tm.wearable.wearabletfm.data.repository.api.FitbitResponseApi
+import tm.wearable.wearabletfm.data.repository.api.forgotPass
 import tm.wearable.wearabletfm.data.repository.datasource.remote.UserRemoteDataSource
 import tm.wearable.wearabletfm.utils.CompositionObj
 import java.lang.Exception
@@ -49,7 +51,10 @@ class UserRepository  @Inject constructor(
                 val response = userRemoteDataSource.registerUser(requestBody = requestBody)
                 val body = response.body()
                 if (body != null) {
-                    val ab = CompositionObj<User,String>(response.body()!!.user, response.body()!!.message)
+                    val bod = response.body()!!
+                    Log.e("", "userRemoteDataSource: 1212"+ bod.message.toString())
+
+                    val ab = CompositionObj<User,String>(bod.user, response.body()!!.message)
                     Result.Success(ab)
                 }
                 else{
@@ -177,5 +182,48 @@ class UserRepository  @Inject constructor(
         }
     }
 
+    suspend fun forgot_password_step_one(email: String): Result<CompositionObj<forgotPass, String>> {
+        return withContext(Dispatchers.Default){
+            try {
+                val requestBody: MutableMap<String, String> = HashMap()
+                requestBody["email"] = email
+                val response = userRemoteDataSource.forgot_password_step_one(requestBody = requestBody)
+                val body = response.body()
+                if (body != null) {
+                    val ab = CompositionObj(response.body()!!.user, response.body()!!.message)
+                    Result.Success(ab)
+                }
+                else{
+                    errorResult( message = "",errorBody = response.errorBody()!!)
+                }
+            }catch (e: Exception){
+                errorResult(message = e.message ?: e.toString())
+            }
+        }
+    }
+
+    suspend fun update_password_step_last(user_id: String, name: String, email: String, password: String, c_password: String): Result<CompositionObj<User, String>> {
+        return withContext(Dispatchers.Default){
+            try {
+                val requestBody: MutableMap<String, String> = HashMap()
+                requestBody["user_id"] = user_id
+                requestBody["name"] = name
+                requestBody["email"] = email
+                requestBody["password"] = password
+                requestBody["c_password"] = c_password
+                val response = userRemoteDataSource.update_password_step_last(requestBody = requestBody)
+                val body = response.body()
+                if (body != null) {
+                    val ab = CompositionObj(response.body()!!.user, response.body()!!.message)
+                    Result.Success(ab)
+                }
+                else{
+                    errorResult( message = "",errorBody = response.errorBody()!!)
+                }
+            }catch (e: Exception){
+                errorResult(message = e.message ?: e.toString())
+            }
+        }
+    }
 
 }

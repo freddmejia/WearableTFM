@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import tm.wearable.wearabletfm.data.model.*
+import tm.wearable.wearabletfm.data.repository.api.forgotPass
 import tm.wearable.wearabletfm.data.repository.repo.UserRepository
 import tm.wearable.wearabletfm.utils.CompositionObj
 import javax.inject.Inject
@@ -35,6 +36,8 @@ class UserViewModel  @Inject constructor(
     private val _compositionNotification = MutableStateFlow<Result<CompositionObj<Notification,String>>>(Result.Empty)
     val compositionNotification :  StateFlow<Result<CompositionObj<Notification,String>>> = _compositionNotification
 
+    private val _compositionRecoverAccount = MutableStateFlow<Result<CompositionObj<forgotPass, String>>>(Result.Empty)
+    val compositionRecoverAccount : StateFlow<Result<CompositionObj<forgotPass, String>>> = _compositionRecoverAccount
 
 
     private val _loadingProgress = MutableStateFlow(false)
@@ -89,4 +92,17 @@ class UserViewModel  @Inject constructor(
         _loadingProgress.value = false
     }
 
+    fun forgot_password_step_one(email: String) = viewModelScope.launch (Dispatchers.IO) {
+        _compositionRecoverAccount.value = Result.Empty
+        _loadingProgress.value = true
+        _compositionRecoverAccount.value = userRepository.forgot_password_step_one(email = email)
+        _loadingProgress.value = false
+    }
+
+    fun update_password_step_last(user_id: String, name: String, email: String, password: String, c_password: String) = viewModelScope.launch (Dispatchers.IO) {
+        _compositionLogin.value = Result.Empty
+        _loadingProgress.value = true
+        _compositionLogin.value = userRepository.update_password_step_last(user_id = user_id, name = name, email = email, password = password, c_password = c_password)
+        _loadingProgress.value = false
+    }
 }
