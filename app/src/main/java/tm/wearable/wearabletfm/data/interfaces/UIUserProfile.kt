@@ -6,4 +6,5 @@ import tm.wearable.wearabletfm.data.model.User
 interface UIUserProfile {
     fun save(user: User)
     fun showMessage(message: String)
+    fun logout(user: User)
 }

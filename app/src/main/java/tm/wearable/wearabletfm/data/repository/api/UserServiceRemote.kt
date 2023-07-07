@@ -46,6 +46,9 @@ interface UserServiceRemote {
     @POST(Utils.update_password_step_last)
     suspend fun update_password_step_last(@Body requestBody: Map<String,String>): retrofit2.Response<UserResponseApi>
 
+    @POST(Utils.logout)
+    suspend fun logout(@Body requestBody: Map<String,String>): retrofit2.Response<LogoutdDResponseApi>
+
 }
 
 class UserResponseApi {
@@ -79,6 +82,10 @@ class NotificationDResponseApi {
 
 class ForgotPasswordDResponseApi {
     @SerializedName("user") var user: forgotPass = forgotPass()
+    @SerializedName("message") var message: String = ""
+}
+
+class LogoutdDResponseApi {
     @SerializedName("message") var message: String = ""
 }
 

@@ -91,4 +91,7 @@ dependencies {
     //icon battery
     implementation "io.github.iamthevoid.batteryview:batteryview:0.6.1"
 
+    //webview
+    //implementation 'com.github.delight-im:Android-AdvancedWebView:v3.0.0'
+
 }

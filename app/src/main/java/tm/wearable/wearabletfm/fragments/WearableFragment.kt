@@ -115,7 +115,7 @@ class WearableFragment : Fragment(R.layout.wearable_fragment) {
     }
 
     fun openView(url: String){
-        WearableDialogs.openURLEnWebView(context = this@WearableFragment.requireContext(), url = url)
+        WearableDialogs.openURLEnWebView2(context = this@WearableFragment.requireContext(), url = url)
     }
 
     fun callApi(){

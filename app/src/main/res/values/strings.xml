@@ -8,7 +8,7 @@
     <string name="new_user">Soy nuevo</string>
     <string name="login_email">Escribe correo electronico</string>
     <string name="login_password">Escribe contraseña</string>
-    <string name="re_login_password">Rescribe contraseña</string>
+    <string name="re_login_password">Reescribe contraseña</string>
     <string name="btn_access">Ingresar</string>
     <string name="btn_send">Enviar</string>
     <string name="btn_save">Guardar</string>
@@ -86,5 +86,6 @@
     <string name="error_no_data">No hay datos</string>
     <string name="error_data">Hay datos</string>
     <string name="error_no_have_friends">No tienes amigos, agrega amigos para ver datos</string>
-
+    <string name="error_code">Código no coincide</string>
+    <string name="password_error">Contraseñas no coinciden</string>
 </resources>

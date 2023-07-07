@@ -19,5 +19,6 @@ class UserRemoteDataSource @Inject constructor(
     suspend fun deleteNotification(requestBody: MutableMap<String, String>) = userService.deleteNotification(requestBody)
     suspend fun forgot_password_step_one(requestBody: MutableMap<String, String>) = userService.forgot_password_step_one(requestBody)
     suspend fun update_password_step_last(requestBody: MutableMap<String, String>) = userService.update_password_step_last(requestBody)
+    suspend fun logout(requestBody: MutableMap<String, String>) = userService.logout(requestBody)
 
 }

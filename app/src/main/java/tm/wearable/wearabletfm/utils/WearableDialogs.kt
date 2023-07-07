@@ -54,6 +54,9 @@ class WearableDialogs {
             binding.etName.setText(user.name)
             binding.etEmail.setText(user.email)
 
+            binding.cvLogout.setOnClickListener {
+                observer.logout(user = user)
+            }
             alertDialogBuilder.setButton(
                 Dialog.BUTTON_POSITIVE,context.resources.getString(R.string.update_user),
                 DialogInterface.OnClickListener { dialogInterface, i ->
@@ -193,10 +196,48 @@ class WearableDialogs {
             alertDialogBuilder.getButton(Dialog.BUTTON_POSITIVE).setTextColor(context.resources.getColor(R.color.blue_a7))
         }
 
+
+        fun openURLEnWebView2(context: Context, url: String) {
+            val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(context).setCancelable(false).create()
+            val binding = OauthFitbitAlertBinding.bind(LayoutInflater.from(context).inflate(R.layout.oauth_fitbit_alert, null))
+
+            binding.webView.settings.javaScriptEnabled = true
+            binding.webView.settings.domStorageEnabled = true
+            binding.webView.settings.javaScriptCanOpenWindowsAutomatically = true
+
+            // Configurar el WebViewClient para cargar la URL dentro del WebView
+            binding.webView.webViewClient = object : WebViewClient() {
+                override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: android.net.http.SslError?) {
+                    handler?.proceed() // Permitir todos los errores de SSL
+                }
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    super.onPageFinished(view, url)
+                    binding.webView.evaluateJavascript("document.getElementById('myInputField').focus();", null)
+                }
+            }
+
+            binding.webView.loadUrl(url)
+
+            alertDialogBuilder.setButton(
+                Dialog.BUTTON_NEGATIVE,
+                context.resources.getString(R.string.cancel),
+                DialogInterface.OnClickListener { dialogInterface, _ ->
+                    dialogInterface.dismiss()
+                }
+            )
+
+            alertDialogBuilder.setView(binding.root)
+            alertDialogBuilder.show()
+            alertDialogBuilder.getButton(Dialog.BUTTON_NEGATIVE).setTextColor(Color.RED)
+        }
+
+
         fun openURLEnWebView(context: Context, url: String) {
 
             val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(context).setCancelable(false).create()
             val binding = OauthFitbitAlertBinding.bind(LayoutInflater.from(context).inflate(R.layout.oauth_fitbit_alert,null))
+
 
             // Crear un objeto de confianza SSL personalizado que no realiza ninguna verificación
             val trustAllCerts = arrayOf<TrustManager>(object : X509TrustManager {
@@ -216,6 +257,11 @@ class WearableDialogs {
             binding.webView.settings.javaScriptEnabled = true
             binding.webView.settings.domStorageEnabled = true
             binding.webView.settings.javaScriptCanOpenWindowsAutomatically = true
+            binding.webView.settings.setSupportMultipleWindows(true)
+            binding.webView.settings.setJavaScriptCanOpenWindowsAutomatically(true)
+            binding.webView.requestFocus()
+            binding.webView.requestFocusFromTouch()
+
 
             //binding.webView.apply {
                 // Configurar el WebViewClient para cargar la URL dentro del WebView
@@ -233,6 +279,12 @@ class WearableDialogs {
 
                     override fun onReceivedError(view: WebView, errorCode: Int, description: String, failingUrl: String) {
                         Log.e("WebView", "Error: $errorCode, Description: $description, URL: $failingUrl")
+                    }
+
+                    override fun onPageFinished(view: WebView?, url: String?) {
+                        super.onPageFinished(view, url)
+                        binding.webView.evaluateJavascript("document.getElementById('myInputField').focus();", null)
+
                     }
                 }
 

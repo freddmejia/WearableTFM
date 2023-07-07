@@ -17,6 +17,7 @@ import tm.wearable.wearabletfm.utils.Utils.Companion.errorResult
 class UserRepository  @Inject constructor(
     private val userRemoteDataSource: UserRemoteDataSource
 ) {
+
     suspend fun login(email: String,password: String): Result<CompositionObj<User, String>> {
         return withContext(Dispatchers.Default){
             try {
@@ -29,6 +30,27 @@ class UserRepository  @Inject constructor(
                     var user = response.body()!!.user
                     user.health = response.body()!!.health_data
                     val ab = CompositionObj<User,String>(user, response.body()!!.message)
+                    Result.Success(ab)
+                }
+                else{
+                    errorResult( message = "",errorBody = response.errorBody()!!)
+                }
+            }catch (e: Exception){
+                errorResult(message = e.message ?: e.toString())
+            }
+        }
+    }
+
+    suspend fun logout(user_id: String): Result<CompositionObj<String, String>> {
+        return withContext(Dispatchers.Default){
+            try {
+                val requestBody: MutableMap<String, String> = HashMap()
+                requestBody["user_id"] = user_id
+                val response = userRemoteDataSource.logout(requestBody = requestBody)
+                val body = response.body()
+                if (body != null) {
+                    var message = response.body()!!.message
+                    val ab = CompositionObj<String,String>(message, response.body()!!.message)
                     Result.Success(ab)
                 }
                 else{

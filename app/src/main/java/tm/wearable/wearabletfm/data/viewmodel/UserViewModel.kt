@@ -21,6 +21,9 @@ class UserViewModel  @Inject constructor(
     private val _compositionLogin = MutableStateFlow<Result<CompositionObj<User, String>>>(Result.Empty)
     val compositionLogin : StateFlow<Result<CompositionObj<User, String>>> = _compositionLogin
 
+    private val _compositionLogout = MutableStateFlow<Result<CompositionObj<String, String>>>(Result.Empty)
+    val compositionLogout : StateFlow<Result<CompositionObj<String, String>>> = _compositionLogout
+
     private val _compositionUpdateUser = MutableStateFlow<Result<CompositionObj<shortUser, String>>>(Result.Empty)
     val compositionUpdateUser :  StateFlow<Result<CompositionObj<shortUser, String>>> = _compositionUpdateUser
 
@@ -105,4 +108,12 @@ class UserViewModel  @Inject constructor(
         _compositionLogin.value = userRepository.update_password_step_last(user_id = user_id, name = name, email = email, password = password, c_password = c_password)
         _loadingProgress.value = false
     }
+
+    fun logout(user_id: String) = viewModelScope.launch (Dispatchers.IO) {
+        _compositionLogout.value = Result.Empty
+        _loadingProgress.value = true
+        _compositionLogout.value = userRepository.logout(user_id = user_id)
+        _loadingProgress.value = false
+    }
+
 }

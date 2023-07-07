@@ -5,6 +5,9 @@ import android.content.Intent
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.util.Log
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.activity.viewModels
@@ -28,6 +31,7 @@ class ForgotPasswordActivity : AppCompatActivity() {
     private lateinit var binding: ActivityForgotPasswordBinding
     private val userViewModel: UserViewModel by viewModels()
     private lateinit var user: User
+    private lateinit var forgotPass: forgotPass
     private lateinit var toast: Toast
     private lateinit var toolbarAppBinding: MainToolbarBinding
     private lateinit var sharedPreferences: SharedPreferences
@@ -38,10 +42,12 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         setUpToolBar()
         user = User()
+        forgotPass = forgotPass()
         toast = Toast(this)
         sharedPreferences = this.getSharedPreferences(
             getString(R.string.shared_preferences), Context.MODE_PRIVATE)
 
+        showLayoutCode(isVisible = false)
         showLayoutPass(isVisible = false)
 
         api()
@@ -66,14 +72,15 @@ class ForgotPasswordActivity : AppCompatActivity() {
             userViewModel.compositionRecoverAccount.collect {result ->
                 when(result) {
                     is Result.Success<CompositionObj<forgotPass, String>> -> {
+                        forgotPass = result.data.data
                         user.id = result.data.data.id
                         user.name = result.data.data.name
                         user.email = result.data.data.email
-                        showLayoutPass(isVisible = true)
+                        showLayoutCode(isVisible = true)
                         showToast(message = result.data.message)
                     }
                     is Result.Error -> {
-                        showLayoutPass(isVisible = false)
+                        showLayoutCode(isVisible = false)
                         showToast(message = result.error)
                     }
                     else -> Unit
@@ -117,7 +124,6 @@ class ForgotPasswordActivity : AppCompatActivity() {
                         finish()
                     }
                     is Result.Error -> {
-                        showLayoutPass(isVisible = false)
                         showToast(message = result.error)
                     }
                     else -> Unit
@@ -140,11 +146,83 @@ class ForgotPasswordActivity : AppCompatActivity() {
 
         }
 
+
+        binding.etCode.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+
+            }
+
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val inputText = s.toString()
+                Log.e("", "onTextChanged1: "+inputText )
+                if (inputText.trim().length >= 2){
+                    Log.e("", "onTextChanged2: " )
+                    if (inputText == forgotPass.code){
+                        showLayoutPass(isVisible = true)
+                        binding.etCode.error = null
+                    }
+                    else {
+                        showLayoutPass(isVisible = false)
+                        binding.etCode.error = resources.getString(R.string.error_code)
+                    }
+                }
+
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                // Este método se llama después de que el texto cambie
+            }
+        })
+
+        binding.etPassword.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val inputText = s.toString()
+                if (inputText.trim().length >= 2){
+                    if (inputText == binding.etPassword1.text.toString()){
+                        binding.etPassword.error = null
+                        binding.etPassword1.error = null
+                    }
+                    else {
+                        binding.etPassword.error = resources.getString(R.string.password_error)
+                        binding.etPassword1.error = resources.getString(R.string.password_error)
+                    }
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+
+        binding.etPassword1.addTextChangedListener(object : TextWatcher {
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+                val inputText = s.toString()
+                if (inputText.trim().length >= 2){
+                    if (inputText == binding.etPassword.text.toString()){
+                        binding.etPassword.error = null
+                        binding.etPassword1.error = null
+                    }
+                    else {
+                        binding.etPassword.error = resources.getString(R.string.password_error)
+                        binding.etPassword1.error = resources.getString(R.string.password_error)
+                    }
+                }
+            }
+            override fun afterTextChanged(s: Editable?) {
+            }
+        })
+
         binding.cvSave.setOnClickListener {
             val password = binding.etPassword.text.toString()
             val password1 = binding.etPassword1.text.toString()
-            if (password.trim().isEmpty() && password1.trim().isEmpty() && password == password1 ){
+            if (password.trim().isEmpty() && password1.trim().isEmpty()  ){
                 showToast(message = resources.getString(R.string.error_fill))
+                return@setOnClickListener
+            }
+            if (password != password1){
+                showToast(message = resources.getString(R.string.password_error))
                 return@setOnClickListener
             }
 
@@ -156,7 +234,10 @@ class ForgotPasswordActivity : AppCompatActivity() {
                 c_password = password1
             )
 
+
         }
+
+
     }
 
     fun showToast(message: String){
@@ -185,9 +266,19 @@ class ForgotPasswordActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    fun showLayoutCode(isVisible : Boolean) {
+        binding.cvCode.isVisible = isVisible
+    }
+
     fun showLayoutPass(isVisible : Boolean) {
         binding.cvPassword.isVisible = isVisible
         binding.cvPassword1.isVisible = isVisible
         binding.cvSave.isVisible = isVisible
+    }
+
+    override fun onResume() {
+        super.onResume()
+        showLayoutCode(isVisible = false)
+        showLayoutPass(isVisible = false)
     }
 }

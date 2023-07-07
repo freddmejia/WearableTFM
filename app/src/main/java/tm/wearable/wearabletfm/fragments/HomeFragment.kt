@@ -14,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import dagger.hilt.android.AndroidEntryPoint
 import org.json.JSONObject
+import tm.wearable.wearabletfm.MainActivity
 import tm.wearable.wearabletfm.ui.AddMedicineActivity
 
 import tm.wearable.wearabletfm.R
@@ -212,6 +213,22 @@ class HomeFragment: Fragment(R.layout.home_fragment), UIUserProfile, UIUserHealt
     override fun showMessage(message: String) {
         showToast(message = message)
     }
+
+    override fun logout(user: User) {
+        userViewModel.logout(user_id = user.id.toString())
+        val editor = sharedPref.edit()
+        editor.remove("user")
+        editor.remove("token")
+        editor.remove("islogged")
+        editor.remove("health")
+        editor.apply()
+        requireActivity().finish();
+        startActivity(
+            Intent(this@HomeFragment.requireContext(), MainActivity::class.java)
+        )
+
+    }
+
     fun showToast(message: String){
         toast?.cancel()
         toast = Toast.makeText(this@HomeFragment.requireContext(),message, Toast.LENGTH_LONG)
