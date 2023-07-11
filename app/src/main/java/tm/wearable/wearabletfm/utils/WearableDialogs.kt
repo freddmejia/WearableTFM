@@ -44,6 +44,7 @@ import javax.net.ssl.HttpsURLConnection
 import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
+import androidx.appcompat.app.AlertDialog
 
 class WearableDialogs {
     companion object {
@@ -197,6 +198,8 @@ class WearableDialogs {
         }
 
 
+
+
         fun openURLEnWebView2(context: Context, url: String) {
             val alertDialogBuilder = androidx.appcompat.app.AlertDialog.Builder(context).setCancelable(false).create()
             val binding = OauthFitbitAlertBinding.bind(LayoutInflater.from(context).inflate(R.layout.oauth_fitbit_alert, null))
@@ -204,18 +207,6 @@ class WearableDialogs {
             binding.webView.settings.javaScriptEnabled = true
             binding.webView.settings.domStorageEnabled = true
             binding.webView.settings.javaScriptCanOpenWindowsAutomatically = true
-
-            // Configurar el WebViewClient para cargar la URL dentro del WebView
-            binding.webView.webViewClient = object : WebViewClient() {
-                override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: android.net.http.SslError?) {
-                    handler?.proceed() // Permitir todos los errores de SSL
-                }
-
-                override fun onPageFinished(view: WebView?, url: String?) {
-                    super.onPageFinished(view, url)
-                    binding.webView.evaluateJavascript("document.getElementById('myInputField').focus();", null)
-                }
-            }
 
             binding.webView.loadUrl(url)
 

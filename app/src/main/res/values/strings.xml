@@ -2,7 +2,7 @@
     <string name="app_name">WearableTFM</string>
     <string name="wearable_app">Wearable App</string>
     <string name="wearable_hello">Hello</string>
-    <string name="message_welcome">Bienvenido  a Wearable App, una app para recolectar la informacion de tu wearable y mostrarte.... </string>
+    <string name="message_welcome">Bienvenido  a Wearable Health TFM, una app para recolectar la información de tu wearable, gestionar medicinas y ver salud de tus amigos.... </string>
     <string name="access_title">Acceder</string>
     <string name="register_title">Registrarse</string>
     <string name="new_user">Soy nuevo</string>

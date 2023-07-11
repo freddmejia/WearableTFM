@@ -90,8 +90,6 @@ class WearableFragment : Fragment(R.layout.wearable_fragment) {
                         binding?.placeholder?.isVisible = false
                     }
                     is tm.wearable.wearabletfm.utils.Result.Error -> {
-                        showToast(message = result.error)
-
                         binding?.rvWearables?.isVisible = false
                         binding?.placeholder?.isVisible = true
                     }
