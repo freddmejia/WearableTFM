@@ -1,6 +1,7 @@
 package tm.wearable.wearabletfm.fragments
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -22,6 +23,7 @@ import tm.wearable.wearabletfm.data.viewmodel.DeviceViewModel
 import tm.wearable.wearabletfm.data.viewmodel.FriendViewModel
 import tm.wearable.wearabletfm.data.viewmodel.UserViewModel
 import tm.wearable.wearabletfm.databinding.WearableFragmentBinding
+import tm.wearable.wearabletfm.ui.OAuthFitbitActivity
 import tm.wearable.wearabletfm.utils.CompositionObj
 import tm.wearable.wearabletfm.utils.WearableDialogs
 
@@ -113,7 +115,10 @@ class WearableFragment : Fragment(R.layout.wearable_fragment) {
     }
 
     fun openView(url: String){
-        WearableDialogs.openURLEnWebView2(context = this@WearableFragment.requireContext(), url = url)
+        //WearableDialogs.openURLEnWebView2(context = this@WearableFragment.requireContext(), url = url)
+        val intn = Intent(this@WearableFragment.requireContext(), OAuthFitbitActivity::class.java)
+        intn.putExtra("url",url)
+        startActivity(intn)
     }
 
     fun callApi(){

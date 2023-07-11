@@ -11,8 +11,9 @@ import java.util.*
 class Utils {
     companion object {
         const val api_version = "/api"
-        const val domainApi = "http://192.168.1.31:8000/"
-        //const val domainApi = "http://52.54.33.62/"
+        //const val domainApi = "http://192.168.1.31:8000/"
+
+        const val domainApi = "https://wearablehealth-tfm.com/"
         const val domainApiFitbit = "https://www.fitbit.com/"
         const val oauthFitbit = "/oauth2"
 
