@@ -1,7 +1,9 @@
 package tm.wearable.wearabletfm
 
 import android.app.DatePickerDialog
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.PorterDuff
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,7 +15,11 @@ import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.commit
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import dagger.hilt.android.AndroidEntryPoint
+import org.json.JSONObject
+import tm.wearable.wearabletfm.data.model.User
 import tm.wearable.wearabletfm.data.viewmodel.CalendarViewModel
 import tm.wearable.wearabletfm.data.viewmodel.UserViewModel
 import tm.wearable.wearabletfm.databinding.ActivityLoginBinding
@@ -37,6 +43,9 @@ class MainAppActivity : AppCompatActivity() {
     private lateinit var bottomBarBinding: BottomBarBinding
     private var dateSelected = GregorianCalendar()
     private val calendarViewModel: CalendarViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
+    private lateinit var user: User
+    private lateinit var sharedPref: SharedPreferences
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainAppBinding.inflate(layoutInflater)
@@ -46,11 +55,30 @@ class MainAppActivity : AppCompatActivity() {
         bottomBarBinding = BottomBarBinding.bind(binding.root)
         setSupportActionBar(toolbarAppBinding.toolbar)
 
+        try {
+            sharedPref = this@MainAppActivity.getSharedPreferences(
+                getString(R.string.shared_preferences), Context.MODE_PRIVATE)
+            user = User(JSONObject(sharedPref!!.getString("user","")))
+            getTokenFirebase(user = user)
+        }catch (e: java.lang.Exception){
+            e.printStackTrace()
+        }
         events()
         coroutines()
         chooseSelectionMenu(fragment = HomeFragment.newInstance())
 
     }
+
+    fun getTokenFirebase(user: User) {
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                return@OnCompleteListener
+            }
+            val token = task.result
+            userViewModel.update_token(user_id = user.id.toString(), token = token)
+        })
+    }
+
     fun events() {
 
         bottomBarBinding.rvHome.setOnClickListener {

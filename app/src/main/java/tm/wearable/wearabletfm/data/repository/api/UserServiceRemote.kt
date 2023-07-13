@@ -9,7 +9,7 @@ import tm.wearable.wearabletfm.data.model.User
 import tm.wearable.wearabletfm.data.model.shortUser
 import tm.wearable.wearabletfm.utils.Utils
 
-interface UserServiceRemote {
+interface   UserServiceRemote {
     @POST(Utils.login)
     suspend fun loginUser(@Body requestBody: Map<String,String>): retrofit2.Response<UserResponseApi>
 
@@ -49,6 +49,8 @@ interface UserServiceRemote {
     @POST(Utils.logout)
     suspend fun logout(@Body requestBody: Map<String,String>): retrofit2.Response<LogoutdDResponseApi>
 
+    @POST(Utils.update_token)
+    suspend fun updateToken (@Body requestBody: Map<String,String>): retrofit2.Response<UserShortResponseApi>
 }
 
 class UserResponseApi {

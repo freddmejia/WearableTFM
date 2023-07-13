@@ -26,6 +26,7 @@ class Utils {
         const val update_user_image = "$api_version/update_user_image"
         const val update_health_data_user = "$api_version/update_health_data_user"
         const val logout = "$api_version/logout"
+        const val update_token = "$api_version/update_token"
 
         //medicine
         const val store_medicine = "$api_version/store_medicine"

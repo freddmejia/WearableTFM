@@ -21,4 +21,7 @@ class UserRemoteDataSource @Inject constructor(
     suspend fun update_password_step_last(requestBody: MutableMap<String, String>) = userService.update_password_step_last(requestBody)
     suspend fun logout(requestBody: MutableMap<String, String>) = userService.logout(requestBody)
 
+    suspend fun updateToken(requestBody: MutableMap<String, String>) = userService.updateToken(requestBody)
+
+
 }

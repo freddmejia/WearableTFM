@@ -116,4 +116,8 @@ class UserViewModel  @Inject constructor(
         _loadingProgress.value = false
     }
 
+    fun update_token(user_id: String, token: String) = viewModelScope.launch (Dispatchers.IO) {
+        userRepository.update_token(user_id = user_id, token = token)
+    }
+
 }
