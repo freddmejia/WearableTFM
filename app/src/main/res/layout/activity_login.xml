@@ -124,7 +124,7 @@
                             android:background="@android:color/transparent"
                             android:hint="@string/login_email"
                             android:imeOptions="actionDone"
-                            android:text="fredd@gmail.com"/>
+                            android:text=""/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView
@@ -157,7 +157,7 @@
                             android:background="@android:color/transparent"
                             android:hint="@string/login_password"
                             android:imeOptions="actionDone"
-                            android:text="8990"/>
+                            android:text=""/>
                     </LinearLayout>
                 </com.google.android.material.card.MaterialCardView>
                 <com.google.android.material.card.MaterialCardView

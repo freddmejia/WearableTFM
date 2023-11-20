@@ -125,4 +125,9 @@ class WearableFragment : Fragment(R.layout.wearable_fragment) {
         Log.e("", "callApi: "+user.id.toString() )
         deviceViewModel.fetch_devices(user_id = user.id.toString())
     }
+
+    override fun onResume() {
+        super.onResume()
+        callApi()
+    }
 }

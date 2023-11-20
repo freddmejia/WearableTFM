@@ -25,6 +25,7 @@ class MetricsGeneralAdapter (val context: Context, var list: List<Metrics>, val 
         private val binding = binding
 
         fun binData(metrics: Metrics, context: Context, observer: UIMetric?=null){
+
             Log.e("", "binData: "+metrics.type )
             binding.valueMetric.text = metrics.value +" \n"+metrics.measure
             binding.imageType.setImageResource(TypeMetrics.getIconSensor(type = metrics.type))

@@ -100,22 +100,26 @@ class DataFragment : Fragment(R.layout.data_fragment), UIMetric, UIMetricFriend 
             deviceViewModel.compositionMetrics.collect { result->
                 when(result){
                     is tm.wearable.wearabletfm.utils.Result.Success<CompositionObj<ArrayList<Metrics>, String>> ->{
-                        metricsGeneralAdapter.setNewData(arrayList = result.data.data)
+                        noDatametrics( dataMetrics = result.data.data)
+                        /*metricsGeneralAdapter.setNewData(arrayList = result.data.data)
 
                         binding?.rvMetrics?.isVisible = true
                         binding?.vytalSignal?.isVisible = true
                         binding?.cvAccessData?.isVisible = true
                         binding?.cvAccessData?.isVisible = true
-                        binding?.noData?.isVisible = false
+                        binding?.noData?.isVisible = false*/
 
                     }
                     is tm.wearable.wearabletfm.utils.Result.Error -> {
+
                         showToast(message = result.error)
-                        binding?.cvAccessData?.isVisible = false
+                        noDatametrics(dataMetrics = arrayListOf())
+
+                        /*binding?.cvAccessData?.isVisible = false
                         binding?.vytalSignal?.isVisible = false
                         binding?.rvMetrics?.isVisible = false
                         binding?.noData?.isVisible = true
-                        binding?.cvAccessData?.isVisible = true
+                        binding?.cvAccessData?.isVisible = true*/
                     }
                     else -> Unit
                 }
@@ -173,5 +177,23 @@ class DataFragment : Fragment(R.layout.data_fragment), UIMetric, UIMetricFriend 
     override fun onResume() {
         super.onResume()
         user = User(JSONObject(prefsUser!!.getString("user","")))
+        callApi()
+    }
+
+    fun noDatametrics( dataMetrics: ArrayList<Metrics>){
+        if (dataMetrics.isNotEmpty()){
+            metricsGeneralAdapter.setNewData(arrayList = dataMetrics)
+
+            binding?.rvMetrics?.isVisible = true
+            binding?.vytalSignal?.isVisible = true
+            binding?.cvAccessData?.isVisible = true
+            binding?.noData?.isVisible = false
+            return
+        }
+
+        binding?.cvAccessData?.isVisible = false
+        binding?.vytalSignal?.isVisible = false
+        binding?.rvMetrics?.isVisible = false
+        binding?.noData?.isVisible = true
     }
 }

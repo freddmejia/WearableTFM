@@ -34,6 +34,9 @@ class MetricsDetailAdapter (val context: Context, var list: ArrayList<Metrics?>)
                     binding.rvDetailsDataMetrics.adapter = adapter
                     binding.tvBedTime.text = metrics.datetime.split(" ")[1]
                     binding.tvWakeTime.text = metrics.enddatetime.split(" ")[1]
+                    binding.info.setOnClickListener {
+
+                    }
                     /*binding.linear1.isVisible = true
                     binding.totalSleep.text = context.resources.getString(R.string.from)+" "+ deviceData.created_at.split(" ")[1] +" "+
                             context.resources.getString(R.string.to)+" "+

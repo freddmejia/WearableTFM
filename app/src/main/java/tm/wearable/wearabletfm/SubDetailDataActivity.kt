@@ -1,5 +1,6 @@
 package tm.wearable.wearabletfm
 
+import android.app.DatePickerDialog
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -164,6 +165,24 @@ class SubDetailDataActivity : AppCompatActivity(), UICDay {
                     calendarViewModel.getActualWeek(dateSelected = actualDate, isPrevious = true, dateToSelect = actualDate)
                 }
             }
+        }
+
+        toolbarAppBinding.calendar.setOnClickListener {
+            if (dateSelected == null)
+                dateSelected = GregorianCalendar()
+            val year = dateSelected.get(Calendar.YEAR)
+            val month = dateSelected.get(Calendar.MONTH)
+            val day = dateSelected.get(Calendar.DAY_OF_MONTH)
+            val dpd = DatePickerDialog(this@SubDetailDataActivity, DatePickerDialog.OnDateSetListener{
+                    view, year, monthOfYear, dayOfMonth ->
+                val newC = GregorianCalendar()
+                newC.set(GregorianCalendar.YEAR, year)
+                newC.set(GregorianCalendar.MONTH, monthOfYear)
+                newC.set(GregorianCalendar.DAY_OF_MONTH, dayOfMonth)
+                calendarViewModel.dateSelected(dateSelected = newC, true)
+            }, year, month, day)
+            dpd.datePicker.maxDate = GregorianCalendar().time.time
+            dpd.show()
         }
     }
 
